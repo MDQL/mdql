@@ -1,0 +1,20 @@
+{
+  "name": "markdown-QL",
+  "packageManager": "yarn@3.3.1",
+  "devDependencies": {
+    "@types/jest": "^29.5.3",
+    "@types/markdown-it": "^12.2.3",
+    "@types/node": "^20.4.4",
+    "jest": "^29.6.1",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "glob": "^10.3.3",
+    "markdown-it": "^13.0.1"
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "jest"
+  }
+}
