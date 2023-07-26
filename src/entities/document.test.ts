@@ -1,7 +1,7 @@
-import { parseDocument } from "./document";
-import { Heading } from "./headings";
-import { Tag } from "./tags";
-import { Task } from "./tasks";
+import { Document } from "./document";
+import { Heading } from "./heading";
+import { Tag } from "./tag";
+import { Task } from "./task";
 
 const testdata = `
 # Tasks Testdata
@@ -29,7 +29,7 @@ Test-Data for Tasks parsing
 
 describe("document parsing test", () => {
   it("happy path", () => {
-    const actual = parseDocument("test/mydocument.md", testdata);
+    const actual = Document.parse("test/mydocument.md", testdata);
     const expectedHeadings: Heading[] = [
       { level: 1, text: "Tasks Testdata", tags: [] },
       {

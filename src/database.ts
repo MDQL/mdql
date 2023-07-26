@@ -1,6 +1,6 @@
 import fs from "fs";
 import glob from "glob";
-import { Document, parseDocument } from "./document";
+import { Document } from "./entities/document";
 
 export class MarkdownRepository {
   private db: Document[] = [];
@@ -16,7 +16,7 @@ export class MarkdownRepository {
           if (err) {
             console.error(`Error reading file ${file}:`, err);
           } else {
-            const doc = parseDocument(file, data);
+            const doc = Document.parse(file, data);
             this.db.push(doc);
           }
         });
