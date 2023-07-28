@@ -19,7 +19,7 @@
     "markdown-it": "^13.0.1"
   },
   "scripts": {
-    "ci": "tsc -b",
+    "ci": "yarn install && tsc -b",
     "build": "tsc",
     "test": "jest",
     "generate": "antlr -Dlanguage=TypeScript -o ./src/generated MDQL.g4",
