@@ -35,6 +35,9 @@ jobs:
           TAG=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
           jq --arg version "$TAG" '.version = $version' package.json > temp_package.json
           mv temp_package.json package.json
+      - name: Install Yarn 3
+        run: yarn set version berry
+      - run: yarn install
       - run: yarn ci
       - run: yarn npm publish --access public
         env:
