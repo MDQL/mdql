@@ -16,7 +16,7 @@ jobs:
         with:
           node-version: 16
       - name: Install Yarn 3
-        run: npm install -g yarn@3
+        run: yarn set version berry
       - run: yarn ci
       - run: yarn test
 
