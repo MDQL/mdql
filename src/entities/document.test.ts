@@ -4,6 +4,10 @@ import { Tag } from "./tag";
 import { Task } from "./task";
 
 const testdata = `
+---
+numvalue: 123
+svalue: "123"
+---
 # Tasks Testdata
 
 Test-Data for Tasks parsing
@@ -41,16 +45,23 @@ describe("document parsing test", () => {
       { level: 6, text: "Level 6 Headline", tags: [] },
     ];
     const expectedTasks: Task[] = [
-      { checked: false, text: "this is an unchecked Task", tags: [] },
+      {
+        checked: false,
+        status: "open",
+        text: "this is an unchecked Task",
+        tags: [],
+      },
       {
         checked: true,
         text: "this is a checked Task with #a-tag123",
         tags: [{ text: "a-tag123" }],
+        status: "closed",
       },
       {
         checked: true,
         text: "this is a checked Task with special characters [ ]",
         tags: [],
+        status: "closed",
       },
     ];
 
@@ -65,5 +76,7 @@ describe("document parsing test", () => {
     expect(actual.headings).toEqual(expectedHeadings);
     expect(actual.tasks).toEqual(expectedTasks);
     expect(actual.tags).toEqual(expectedTags);
+    expect(actual.frontMatter?.numvalue).toEqual(123);
+    expect(actual.frontMatter?.svalue).toEqual("123");
   });
 });

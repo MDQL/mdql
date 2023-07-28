@@ -1,7 +1,12 @@
 import { Tag } from "./tag";
 
+/**
+ * Markdown Task
+ * @category Entities
+ */
 export interface Task {
   checked: boolean;
+  status: "open" | "closed";
   text: string;
   tags: Tag[];
 }
@@ -15,7 +20,8 @@ export namespace Task {
       const checked = match.groups?.["checked"].toLowerCase() === "x";
       const text = match.groups?.["text"] ?? "";
       const tags = Tag.parse(text);
-      tasks.push({ checked, text, tags });
+      const status = checked ? "closed" : "open";
+      tasks.push({ checked, text, tags, status });
     }
 
     return tasks;

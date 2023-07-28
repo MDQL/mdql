@@ -1,3 +1,7 @@
+/**
+ * Tags
+ * @category Entities
+ */
 export interface Tag {
   text: string;
 }

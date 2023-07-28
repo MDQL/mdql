@@ -1,8 +1,9 @@
 import fs from "fs";
 import glob from "glob";
 import { Document } from "./entities/document";
+import { Task } from "./entities/task";
 
-export class MarkdownRepository {
+export class DocumentRepository {
   private db: Document[] = [];
 
   constructor(private globPattern: string) {}
@@ -24,5 +25,13 @@ export class MarkdownRepository {
     } catch (err) {
       console.error(`Error globbing for files: ${err}`);
     }
+  }
+
+  documents(): Document[] {
+    return this.db;
+  }
+
+  tasks(): Task[] {
+    return this.db.flatMap((doc) => doc.tasks);
   }
 }

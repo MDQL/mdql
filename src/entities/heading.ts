@@ -1,5 +1,9 @@
 import { Tag } from "./tag";
 
+/**
+ * Heading in a markdown document
+ * @category Entities
+ */
 export interface Heading {
   level: number;
   text: string;
