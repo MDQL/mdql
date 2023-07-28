@@ -27,5 +27,6 @@ jobs:
           cache: "yarn"
       - name: Install Yarn 3
         run: yarn set version berry
+      - run: yarn install
       - run: yarn ci
       - run: yarn test
