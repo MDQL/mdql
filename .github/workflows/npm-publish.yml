@@ -27,12 +27,12 @@ jobs:
         with:
           node-version: 16
           registry-url: https://registry.npmjs.org/
-      - run: yarn ci
       - name: Set package.json version
         run: |
           TAG=$(echo "${{ github.ref }}" | sed 's/refs\/tags\///')
           jq --arg version "$TAG" '.version = $version' package.json > temp_package.json
           mv temp_package.json package.json
-      - run: yarn npm publish
+      - run: yarn ci
+      - run: yarn npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{secrets.npm_token}}
