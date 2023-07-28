@@ -1,6 +1,14 @@
 {
-  "name": "markdown-QL",
+  "name": "@gorootde/markdown-ql",
   "packageManager": "yarn@3.3.1",
+  "version": "0.0.1-alpha",
+  "license": "GPL-3.0-only",
+  "keywords": [
+    "markdown",
+    "text processing",
+    "ast",
+    "parser"
+  ],
   "devDependencies": {
     "@types/jest": "^29.5.3",
     "@types/js-yaml": "^4.0.5",
@@ -15,8 +23,7 @@
   "dependencies": {
     "antlr4": "^4.13.0",
     "glob": "^10.3.3",
-    "js-yaml": "^4.1.0",
-    "markdown-it": "^13.0.1"
+    "js-yaml": "^4.1.0"
   },
   "scripts": {
     "ci": "yarn install && tsc -b",
