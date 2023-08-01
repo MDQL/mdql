@@ -1,8 +1,10 @@
+import { Entity } from "./entity";
+
 /**
  * Tags
  * @category Entities
  */
-export interface Tag {
+export interface Tag extends Entity {
   text: string;
 }
 

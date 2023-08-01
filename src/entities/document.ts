@@ -3,6 +3,7 @@ import { Heading } from "./heading";
 import { Tag } from "./tag";
 import { Task } from "./task";
 import { FrontMatter } from "./frontmatter";
+import { Entity } from "./entity";
 
 type Frontmatter = Record<string, any>;
 
@@ -10,7 +11,7 @@ type Frontmatter = Record<string, any>;
  * Entity for markdown documents
  * @category Entities
  */
-export interface Document {
+export interface Document extends Entity {
   /**
    * Filepath of the markdown document
    */

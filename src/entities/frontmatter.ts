@@ -1,10 +1,11 @@
 import yaml from "js-yaml";
+import { Entity } from "./entity";
 
 /**
  * Entity for frontmatter in markdown documents
  * @category Entities
  */
-export interface FrontMatter {
+export interface FrontMatter extends Entity {
   [k: string]: any;
 }
 

@@ -1,10 +1,11 @@
+import { Entity } from "./entity";
 import { Tag } from "./tag";
 
 /**
  * Heading in a markdown document
  * @category Entities
  */
-export interface Heading {
+export interface Heading extends Entity {
   level: number;
   text: string;
   tags: Tag[];

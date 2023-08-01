@@ -1,10 +1,11 @@
+import { Entity } from "./entity";
 import { Tag } from "./tag";
 
 /**
  * Markdown Task
  * @category Entities
  */
-export interface Task {
+export interface Task extends Entity {
   checked: boolean;
   status: "open" | "closed";
   text: string;

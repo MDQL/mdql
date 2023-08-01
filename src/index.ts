@@ -1,4 +1,4 @@
-import { DocumentRepository } from "./document-repository";
+import { DocumentRepository } from "./data-sources/document-repository";
 import { FrontMatter } from "./entities/frontmatter";
 import { Heading } from "./entities/heading";
 import { Tag } from "./entities/tag";

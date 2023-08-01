@@ -1,4 +1,4 @@
-import { DocumentRepository } from "./document-repository";
+import { DocumentRepository } from "./data-sources/document-repository";
 import { ParseException } from "./parse-exception";
 import { Table } from "./table";
 import { ViewType } from "./view-type";
@@ -137,16 +137,16 @@ export class Query {
 export class QueryExecutor {
   constructor(private database: DocumentRepository) {}
 
-  execute(query: Query): QueryResult {
+  async execute(query: Query): Promise<QueryResult> {
     let data: KeyValueObject[];
 
     //Get data from corresponding table
     switch (query.table) {
       case Table.TASKS:
-        data = this.database.tasks();
+        data = await this.database.tasks();
         break;
       case Table.DOCUMENTS:
-        data = this.database.documents();
+        data = await this.database.documents();
         break;
       default:
         throw new ParseException(
