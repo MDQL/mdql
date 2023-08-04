@@ -1,4 +1,4 @@
-# Markdown Query Language
+# MDQL - Markdown Query Language
 
 NodeJS Module for indexing and querying a set of Markdown documents.
 
