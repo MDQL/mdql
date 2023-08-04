@@ -1,4 +1,4 @@
-import { Query } from "./mdql-query";
+import { Query } from "./query";
 import { ParseException } from "./parse-exception";
 import { Position } from "./position";
 

@@ -1,5 +1,5 @@
 {
-  "name": "@gorootde/markdown-ql",
+  "name": "@mdql/mdql",
   "packageManager": "yarn@3.6.1",
   "version": "0.0.3-alpha",
   "license": "GPL-3.0-only",

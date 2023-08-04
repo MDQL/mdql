@@ -3,10 +3,12 @@ import { FrontMatter } from "./entities/frontmatter";
 import { Heading } from "./entities/heading";
 import { Tag } from "./entities/tag";
 import { Task } from "./entities/task";
-import { Query, QueryExecutor, QueryResult } from "./mdql-query";
+import { Query } from "./query";
 import { Table } from "./table";
 import { ViewType } from "./view-type";
 import { Document } from "./entities/document";
+import { QueryExecutor } from "./query-executor";
+import { QueryResult } from "./query-result";
 
 export {
   DocumentRepository,
