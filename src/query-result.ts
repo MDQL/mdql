@@ -2,7 +2,7 @@ import { KeyValueObject, Query } from "./query";
 import { ViewType } from "./view-type";
 
 function joinAllFields(o: any, separator: string) {
-  Object.keys(o)
+  return Object.keys(o)
     .map((key) => o[key])
     .join(separator);
 }

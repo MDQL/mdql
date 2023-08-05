@@ -25,7 +25,7 @@ export class QueryExecutor {
     }
 
     //Filter based on fields array
-    data.map((d) => {
+    data = data.map((d) => {
       const filteredObject: Record<string, any> = {};
       for (const key of query.fields) {
         if (d.hasOwnProperty(key)) {
