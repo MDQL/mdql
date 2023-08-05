@@ -6,8 +6,17 @@ const regex = /```mdql\n(?<query>.+?)\n```(\n(?<content>(> .*\n)+))?/g;
 
 export class MDQLCodeBlock {
   constructor(
+    /**
+     * The position of the code block in the document
+     */
     public readonly blockPos: Position,
+    /**
+     * The raw query as string
+     */
     public readonly rawQuery: string,
+    /**
+     * The position of the query in the document
+     */
     public readonly queryPos: Position,
     public readonly query?: Query,
     public readonly content?: string,
@@ -22,6 +31,7 @@ export class MDQLCodeBlock {
   private static parse(match: RegExpExecArray, s: string): MDQLCodeBlock {
     const query = match?.groups?.["query"];
     const content = match?.groups?.["content"];
+    const rawProps = match?.groups?.["properties"];
 
     let error: unknown;
     if (query) {

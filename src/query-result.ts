@@ -32,7 +32,7 @@ export class QueryResult {
       fieldSeparator: string;
       lineSeparator: string;
     } = {
-      fieldSeparator: ";",
+      fieldSeparator: "; ",
       lineSeparator: "\n",
     }
   ): string {
@@ -51,6 +51,11 @@ export class QueryResult {
           const allFields = joinAllFields(r, " | ");
           return `| ${allFields} |`;
         });
+        const columns = Object.keys(data[0]);
+        const header = `| ${columns.join(" | ")} |`;
+        const separatorDashes = columns.map((c) => c.replace(/./g, "-"));
+        const separator = `| ${separatorDashes.join(" | ")} |`;
+        lines = [header, separator, ...lines];
         break;
       case ViewType.TASKLIST:
         lines = data.map((r) => {

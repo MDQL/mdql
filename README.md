@@ -48,7 +48,9 @@ Examples:
 - `LIST status, text FROM tasks` - Lists the status and the text of all markdown tasks as bullet points
 - `TASKLIST text FROM tasks` - Creates a set
 
-Available datasets:
+See [testdata/query.md](./testdata/query.md) for more examples.
+
+### Available datasets
 
 - `tasks`
 - `documents`

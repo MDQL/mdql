@@ -6,7 +6,10 @@ import { ViewType } from "./view-type";
 
 describe("QueryExecutor", () => {
   const ds: DataSource = {
-    tasks: () => [{ checked: true, status: "closed", text: "test", tags: [] }],
+    tasks: () => [
+      { checked: true, status: "closed", text: "test", tags: [] },
+      { checked: false, status: "open", text: "second", tags: [] },
+    ],
     documents: () => [],
     name: "dummy",
     refresh() {
@@ -18,6 +21,13 @@ describe("QueryExecutor", () => {
     const result = testling
       .execute(new Query(ViewType.LIST, ["text"], Table.TASKS, []))
       .toMarkdown();
-    expect(result).toBe("- test");
+    expect(result).toBe("- test\n- second");
+  });
+  it("tests MD Table rendering", () => {
+    const testling = new QueryExecutor(ds);
+    const result = testling
+      .execute(new Query(ViewType.TABLE, ["text"], Table.TASKS, []))
+      .toMarkdown();
+    expect(result).toEqual("| text |\n| ---- |\n| test |\n| second |");
   });
 });
