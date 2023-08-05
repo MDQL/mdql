@@ -9,6 +9,9 @@ import { ViewType } from "./view-type";
 import { Document } from "./entities/document";
 import { QueryExecutor } from "./query-executor";
 import { QueryResult } from "./query-result";
+import { DataSource } from "./data-sources/data-source";
+import { CombinedDataSource } from "./data-sources/combined-data-source";
+import { MDQLCodeBlock } from "./mdql-codeblock";
 
 export {
   DocumentRepository,
@@ -22,4 +25,7 @@ export {
   ViewType,
   Table,
   Document,
+  DataSource,
+  CombinedDataSource,
+  MDQLCodeBlock,
 };

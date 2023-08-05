@@ -1,4 +1,4 @@
-import fs from "fs";
+import * as fs from "fs";
 import { Heading } from "./heading";
 import { Tag } from "./tag";
 import { Task } from "./task";

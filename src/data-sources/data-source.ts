@@ -16,10 +16,10 @@ export interface DataSource {
   /**
    * Return all available entities of type document. If none are available, must return an empty array
    */
-  documents(): Promise<Document[]>;
+  documents(): Document[];
 
   /**
    * Return all available entities of type document. If none are available, must return an empty array
    */
-  tasks(): Promise<Task[]>;
+  tasks(): Task[];
 }

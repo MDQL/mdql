@@ -14,7 +14,7 @@ describe("integration tests", () => {
       refresh: function (): Promise<void> {
         return Promise.resolve();
       },
-      documents: function (): Promise<Document[]> {
+      documents: function (): Document[] {
         const data: Document[] = [
           {
             frontMatter: {},
@@ -25,9 +25,9 @@ describe("integration tests", () => {
             dataSource: this.name,
           },
         ];
-        return Promise.resolve(data);
+        return data;
       },
-      tasks: function (): Promise<Task[]> {
+      tasks: function (): Task[] {
         const data: Task[] = [
           {
             checked: false,
@@ -37,7 +37,7 @@ describe("integration tests", () => {
             dataSource: this.name,
           },
         ];
-        return Promise.resolve(data);
+        return data;
       },
     };
     const dataSource = new CombinedDataSource(docRepo, otherSource);

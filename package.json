@@ -1,7 +1,7 @@
 {
   "name": "@mdql/mdql",
   "packageManager": "yarn@3.6.1",
-  "version": "0.0.3-alpha",
+  "version": "0.0.5-alpha.15",
   "license": "GPL-3.0-only",
   "keywords": [
     "markdown",
@@ -11,6 +11,9 @@
   ],
   "main": "out/index.js",
   "types": "out/index.d.ts",
+  "exports": {
+    ".": "./out/index.js"
+  },
   "devDependencies": {
     "@types/jest": "^29.5.3",
     "@types/js-yaml": "^4.0.5",

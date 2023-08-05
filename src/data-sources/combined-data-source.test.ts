@@ -6,20 +6,20 @@ describe("combined data source", () => {
     const ds1: DataSource = {
       name: "ds1",
       refresh: jest.fn(() => Promise.resolve()),
-      documents: jest.fn(() => Promise.resolve([])),
-      tasks: jest.fn(() => Promise.resolve([])),
+      documents: jest.fn(() => []),
+      tasks: jest.fn(() => []),
     };
     const ds2: DataSource = {
       name: "ds1",
       refresh: jest.fn(() => Promise.resolve()),
-      documents: jest.fn(() => Promise.resolve([])),
-      tasks: jest.fn(() => Promise.resolve([])),
+      documents: jest.fn(() => []),
+      tasks: jest.fn(() => []),
     };
 
     const testling = new CombinedDataSource(ds1, ds2);
     await testling.refresh();
-    await testling.documents();
-    await testling.tasks();
+    testling.documents();
+    testling.tasks();
 
     expect(ds1.refresh).toHaveBeenCalledTimes(1);
     expect(ds1.documents).toHaveBeenCalledTimes(1);

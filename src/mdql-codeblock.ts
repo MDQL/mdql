@@ -2,10 +2,11 @@ import { Query } from "./query";
 import { ParseException } from "./parse-exception";
 import { Position } from "./position";
 
-const regex = /```mdqlgen\n(?<query>.+?)\n```(\n(?<content>(> .*)+))?/g;
+const regex = /```mdql\n(?<query>.+?)\n```(\n(?<content>(> .*\n)+))?/g;
 
 export class MDQLCodeBlock {
   constructor(
+    public readonly blockPos: Position,
     public readonly rawQuery: string,
     public readonly queryPos: Position,
     public readonly query?: Query,
@@ -18,10 +19,9 @@ export class MDQLCodeBlock {
     return this.content !== undefined && this.content.length > 0;
   }
 
-  static parse(s: string): MDQLCodeBlock {
-    const matches = regex.exec(s);
-    const query = matches?.groups?.["query"];
-    const content = matches?.groups?.["content"];
+  private static parse(match: RegExpExecArray, s: string): MDQLCodeBlock {
+    const query = match?.groups?.["query"];
+    const content = match?.groups?.["content"];
 
     let error: unknown;
     if (query) {
@@ -36,6 +36,8 @@ export class MDQLCodeBlock {
         contentPos = new Position(contentStartPos, contentEndPos);
       }
 
+      const blockPos = new Position(match.index, match.index + match[0].length);
+
       let mdqlQuery: Query | undefined = undefined;
       try {
         mdqlQuery = Query.parse(query);
@@ -44,6 +46,7 @@ export class MDQLCodeBlock {
       }
 
       return new MDQLCodeBlock(
+        blockPos,
         query,
         queryPos,
         mdqlQuery,
@@ -54,5 +57,14 @@ export class MDQLCodeBlock {
     } else {
       throw new ParseException("No query string found");
     }
+  }
+
+  static scan(s: string): MDQLCodeBlock[] {
+    const result: MDQLCodeBlock[] = [];
+    let match;
+    while ((match = regex.exec(s))) {
+      result.push(MDQLCodeBlock.parse(match, s));
+    }
+    return result;
   }
 }

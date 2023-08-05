@@ -31,12 +31,12 @@ export class DocumentRepository implements DataSource {
   }
 
   /** @override */
-  documents(): Promise<Document[]> {
-    return Promise.resolve(this.db);
+  documents(): Document[] {
+    return this.db;
   }
 
   /** @override */
-  tasks(): Promise<Task[]> {
-    return Promise.resolve(this.db.flatMap((doc) => doc.tasks));
+  tasks(): Task[] {
+    return this.db.flatMap((doc) => doc.tasks);
   }
 }

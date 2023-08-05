@@ -16,22 +16,22 @@ export class CombinedDataSource implements DataSource {
     await Promise.all(this.datasources.map((ds) => ds.refresh()));
   }
 
-  async documents(): Promise<Document[]> {
+  documents(): Document[] {
     const result: Document[] = [];
     for (const ds of this.datasources) {
-      const documents = await ds.documents();
+      const documents = ds.documents();
 
       result.push(...documents);
     }
-    return Promise.resolve(result);
+    return result;
   }
 
-  async tasks(): Promise<Task[]> {
+  tasks(): Task[] {
     const result: Task[] = [];
     for (const ds of this.datasources) {
-      const tasks = await ds.tasks();
+      const tasks = ds.tasks();
       result.push(...tasks);
     }
-    return Promise.resolve(result);
+    return result;
   }
 }

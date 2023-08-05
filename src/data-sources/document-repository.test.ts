@@ -7,7 +7,7 @@ describe("DocumentRepository", () => {
     const docRepo = new DocumentRepository("testdata/**/*.md");
     await docRepo.refresh();
 
-    const docs = await docRepo.documents();
+    const docs = docRepo.documents();
     expect(docs.length).toBe(2);
     expect(docs[0].dataSource).toBe("markdown");
     expect(docs[0].path).toBe("testdata/testdata.md");
