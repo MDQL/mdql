@@ -8,7 +8,7 @@ function joinAllFields(o: any, separator: string) {
 }
 
 export class QueryResult {
-  constructor(private query: Query, private result: KeyValueObject[]) {}
+  constructor(private _query: Query, private result: KeyValueObject[]) {}
 
   /**
    * Returns the raw data as a KeyValueObject array.
@@ -17,6 +17,13 @@ export class QueryResult {
    */
   raw(): KeyValueObject[] {
     return this.result;
+  }
+
+  /**
+   * Get the query that generated this result.
+   */
+  get query(): Query {
+    return this._query;
   }
 
   /**
@@ -65,6 +72,6 @@ export class QueryResult {
         });
         break;
     }
-    return lines.join(config.lineSeparator);
+    return lines.map((l) => `> ${l}`).join(config.lineSeparator);
   }
 }
