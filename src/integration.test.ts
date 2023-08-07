@@ -44,9 +44,10 @@ describe("integration tests", () => {
     await dataSource.refresh();
 
     const documents = await dataSource.documents();
-    expect(documents.length).toBe(3);
+    expect(documents.length).toBe(4);
     expect(documents[0].dataSource).toBe("markdown");
     expect(documents[1].dataSource).toBe("markdown");
-    expect(documents[2].dataSource).toBe("otherds");
+    expect(documents[2].dataSource).toBe("markdown");
+    expect(documents[3].dataSource).toBe("otherds");
   });
 });
