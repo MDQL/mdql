@@ -46,19 +46,19 @@ describe("document parsing test", () => {
     ];
     const expectedTasks: Task[] = [
       {
-        checked: false,
+        $checked: false,
         status: "open",
         text: "this is an unchecked Task",
         tags: [],
       },
       {
-        checked: true,
+        $checked: true,
         text: "this is a checked Task with #a-tag123",
         tags: [{ text: "a-tag123" }],
         status: "closed",
       },
       {
-        checked: true,
+        $checked: true,
         text: "this is a checked Task with special characters [ ]",
         tags: [],
         status: "closed",

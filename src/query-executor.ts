@@ -32,6 +32,10 @@ export class QueryExecutor {
           filteredObject[key] = d[key];
         }
       }
+      //force copying of all internal fields prefixed with $
+      for (const key of Object.keys(d).filter((k) => k.startsWith("$"))) {
+        filteredObject[key] = d[key];
+      }
       return filteredObject;
     });
 

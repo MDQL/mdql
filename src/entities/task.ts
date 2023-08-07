@@ -6,7 +6,7 @@ import { Tag } from "./tag";
  * @category Entities
  */
 export interface Task extends Entity {
-  checked: boolean;
+  $checked: boolean;
   status: "open" | "closed";
   text: string;
   tags: Tag[];
@@ -22,7 +22,7 @@ export namespace Task {
       const text = match.groups?.["text"] ?? "";
       const tags = Tag.parse(text);
       const status = checked ? "closed" : "open";
-      tasks.push({ checked, text, tags, status });
+      tasks.push({ $checked: checked, text, tags, status });
     }
 
     return tasks;

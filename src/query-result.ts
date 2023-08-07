@@ -2,9 +2,13 @@ import { KeyValueObject, Query } from "./query";
 import { ViewType } from "./view-type";
 
 function joinAllFields(o: any, separator: string) {
-  return Object.keys(o)
+  return getFields(o)
     .map((key) => o[key])
     .join(separator);
+}
+
+function getFields(o: any) {
+  return Object.keys(o).filter((key) => !key.startsWith("$"));
 }
 
 export class QueryResult {
@@ -58,7 +62,7 @@ export class QueryResult {
           const allFields = joinAllFields(r, " | ");
           return `| ${allFields} |`;
         });
-        const columns = Object.keys(data[0]);
+        const columns = getFields(data[0]);
         const header = `| ${columns.join(" | ")} |`;
         const separatorDashes = columns.map((c) => c.replace(/./g, "-"));
         const separator = `| ${separatorDashes.join(" | ")} |`;
@@ -67,7 +71,7 @@ export class QueryResult {
       case ViewType.TASKLIST:
         lines = data.map((r) => {
           const allFields = joinAllFields(r, config.fieldSeparator);
-          const checked = r["checked"];
+          const checked = r["$checked"];
           return `- [${checked ? "x" : " "}] ${allFields}`;
         });
         break;

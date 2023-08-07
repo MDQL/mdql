@@ -30,7 +30,7 @@ describe("integration tests", () => {
       tasks: function (): Task[] {
         const data: Task[] = [
           {
-            checked: false,
+            $checked: false,
             status: "open",
             tags: [],
             text: "static task",

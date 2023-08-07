@@ -7,8 +7,8 @@ import { ViewType } from "./view-type";
 describe("QueryExecutor", () => {
   const ds: DataSource = {
     tasks: () => [
-      { checked: true, status: "closed", text: "test", tags: [] },
-      { checked: false, status: "open", text: "second", tags: [] },
+      { $checked: true, status: "closed", text: "test", tags: [] },
+      { $checked: false, status: "open", text: "second", tags: [] },
     ],
     documents: () => [],
     name: "dummy",
@@ -29,5 +29,13 @@ describe("QueryExecutor", () => {
       .execute(new Query(ViewType.TABLE, ["text"], Table.TASKS, []))
       .toMarkdown();
     expect(result).toEqual("> | text |\n> | ---- |\n> | test |\n> | second |");
+  });
+
+  it("tests MD Tasklist rendering", () => {
+    const testling = new QueryExecutor(ds);
+    const result = testling
+      .execute(new Query(ViewType.TASKLIST, ["text"], Table.TASKS, []))
+      .toMarkdown();
+    expect(result).toEqual("> - [x] test\n> - [ ] second");
   });
 });
