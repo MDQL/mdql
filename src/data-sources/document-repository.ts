@@ -10,7 +10,7 @@ import { DataSource } from "./data-source";
 export class DocumentRepository implements DataSource {
   private db: Document[] = [];
 
-  constructor(private globPattern: string) {}
+  constructor(private globPattern: string, private ignorePatterns?: string[]) {}
 
   get name(): string {
     return "markdown";
@@ -19,7 +19,7 @@ export class DocumentRepository implements DataSource {
   /** @override */
   async refresh() {
     this.db = [];
-    const files = await glob(this.globPattern);
+    const files = await glob(this.globPattern, { ignore: this.ignorePatterns });
     for (const file of files) {
       const data = fs.readFileSync(file).toString();
 
