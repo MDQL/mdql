@@ -23,6 +23,7 @@ describe("integration tests", () => {
             tags: [],
             tasks: [],
             dataSource: this.name,
+            $uri: "file://foo/bar.md",
           },
         ];
         return data;
@@ -35,6 +36,7 @@ describe("integration tests", () => {
             tags: [],
             text: "static task",
             dataSource: this.name,
+            $uri: "file://foo/bar.md",
           },
         ];
         return data;

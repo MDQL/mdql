@@ -1,11 +1,11 @@
-import { Entity } from "./entity";
+import { Entity, QueryableEntity } from "./entity";
 import { Tag } from "./tag";
 
 /**
  * Markdown Task
  * @category Entities
  */
-export interface Task extends Entity {
+export interface Task extends QueryableEntity {
   $checked: boolean;
   status: "open" | "closed";
   text: string;
@@ -13,7 +13,7 @@ export interface Task extends Entity {
 }
 
 export namespace Task {
-  export function parse(content: string): Task[] {
+  export function parse(documentUri: string, content: string): Task[] {
     const tasks: Task[] = [];
     const regex = /- \[(?<checked>[xX ])\] (?<text>.+)/g;
     let match;
@@ -22,7 +22,7 @@ export namespace Task {
       const text = match.groups?.["text"] ?? "";
       const tags = Tag.parse(text);
       const status = checked ? "closed" : "open";
-      tasks.push({ $checked: checked, text, tags, status });
+      tasks.push({ $checked: checked, text, tags, status, $uri: documentUri });
     }
 
     return tasks;

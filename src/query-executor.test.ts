@@ -7,8 +7,20 @@ import { ViewType } from "./view-type";
 describe("QueryExecutor", () => {
   const ds: DataSource = {
     tasks: () => [
-      { $checked: true, status: "closed", text: "test", tags: [] },
-      { $checked: false, status: "open", text: "second", tags: [] },
+      {
+        $checked: true,
+        status: "closed",
+        text: "test",
+        tags: [],
+        $uri: "file://foo/bar.md",
+      },
+      {
+        $checked: false,
+        status: "open",
+        text: "second",
+        tags: [],
+        $uri: "file://foo/bar.md",
+      },
     ],
     documents: () => [],
     name: "dummy",
