@@ -3,7 +3,7 @@ import { ParseException } from "./parse-exception";
 import { Position } from "./position";
 
 const regex =
-  /```(?<infostring>mdql.*)?\n(?<query>.+?)\n```(\n(?<content>(> .*\n?)+))?/g;
+  /```(?<infostring>mdql( .*)?)\n(?<query>.+?)\n```(\n(?<content>(> .*\n?)+))?/g;
 
 export class MDQLCodeBlock {
   constructor(

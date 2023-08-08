@@ -18,4 +18,11 @@ describe("MQDLCodeBlock", () => {
     expect(testling[1].contentPos.startIndex).toBe(51);
     expect(testling[1].contentPos.endIndex).toBe(51);
   });
+
+  it("tests  MDQLCodeblock.scan()", () => {
+    const testling = MDQLCodeBlock.scan(
+      "```\n//some codeblock without infostring\n```"
+    );
+    expect(testling.length).toBe(0);
+  });
 });
