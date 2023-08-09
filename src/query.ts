@@ -13,6 +13,8 @@ export enum Operator {
   EQUALS,
   NOT_EQUALS,
   CONTAINS,
+  STARTS_WITH,
+  ENDS_WITH,
 }
 export namespace Operator {
   export function parse(s: string): Operator {
@@ -23,13 +25,17 @@ export namespace Operator {
         return Operator.NOT_EQUALS;
       case "=~":
         return Operator.CONTAINS;
+      case "=^":
+        return Operator.STARTS_WITH;
+      case "=$":
+        return Operator.ENDS_WITH;
       default:
         throw new ParseException(`Unsupported operator '${s}'`);
     }
   }
 }
 
-class Filter {
+export class Filter {
   constructor(
     public readonly key: string,
     public readonly operator: Operator,
@@ -42,6 +48,14 @@ class Filter {
       switch (this.operator) {
         case Operator.EQUALS:
           return actualValue === this.value;
+        case Operator.NOT_EQUALS:
+          return actualValue !== this.value;
+        case Operator.CONTAINS:
+          return (actualValue as string).includes(this.value);
+        case Operator.ENDS_WITH:
+          return (actualValue as string).endsWith(this.value);
+        case Operator.STARTS_WITH:
+          return (actualValue as string).startsWith(this.value);
       }
     });
   }

@@ -22,17 +22,19 @@ export default class MDQLParser extends Parser {
 	public static readonly OP_EQUALS = 3;
 	public static readonly OP_NOTEQUALS = 4;
 	public static readonly OP_CONTAINS = 5;
-	public static readonly NEWLINE = 6;
-	public static readonly TASKS = 7;
-	public static readonly DOCUMENTS = 8;
-	public static readonly TASKLIST = 9;
-	public static readonly LIST = 10;
-	public static readonly TABLE = 11;
-	public static readonly FROM = 12;
-	public static readonly WHERE = 13;
-	public static readonly AND = 14;
-	public static readonly FIELD = 15;
-	public static readonly STRING_LITERAL = 16;
+	public static readonly OP_ENDS_WITH = 6;
+	public static readonly OP_STARTS_WITH = 7;
+	public static readonly NEWLINE = 8;
+	public static readonly TASKS = 9;
+	public static readonly DOCUMENTS = 10;
+	public static readonly TASKLIST = 11;
+	public static readonly LIST = 12;
+	public static readonly TABLE = 13;
+	public static readonly FROM = 14;
+	public static readonly WHERE = 15;
+	public static readonly AND = 16;
+	public static readonly FIELD = 17;
+	public static readonly STRING_LITERAL = 18;
 	public static readonly EOF = Token.EOF;
 	public static readonly RULE_query = 0;
 	public static readonly RULE_view = 1;
@@ -43,6 +45,7 @@ export default class MDQLParser extends Parser {
 	public static readonly literalNames: (string | null)[] = [ null, "','", 
                                                             null, "'='", 
                                                             "'!='", "'=~'", 
+                                                            "'=$'", "'=^'", 
                                                             null, "'tasks'", 
                                                             "'documents'" ];
 	public static readonly symbolicNames: (string | null)[] = [ null, null, 
@@ -50,6 +53,8 @@ export default class MDQLParser extends Parser {
                                                              "OP_EQUALS", 
                                                              "OP_NOTEQUALS", 
                                                              "OP_CONTAINS", 
+                                                             "OP_ENDS_WITH", 
+                                                             "OP_STARTS_WITH", 
                                                              "NEWLINE", 
                                                              "TASKS", "DOCUMENTS", 
                                                              "TASKLIST", 
@@ -94,7 +99,7 @@ export default class MDQLParser extends Parser {
 			this.state = 18;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			if (_la===13) {
+			if (_la===15) {
 				{
 				this.state = 16;
 				this.match(MDQLParser.WHERE);
@@ -131,7 +136,7 @@ export default class MDQLParser extends Parser {
 			{
 			this.state = 22;
 			_la = this._input.LA(1);
-			if(!((((_la) & ~0x1F) === 0 && ((1 << _la) & 3584) !== 0))) {
+			if(!((((_la) & ~0x1F) === 0 && ((1 << _la) & 14336) !== 0))) {
 			this._errHandler.recoverInline(this);
 			}
 			else {
@@ -209,7 +214,7 @@ export default class MDQLParser extends Parser {
 			this.state = 37;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
-			while (_la===14) {
+			while (_la===16) {
 				{
 				{
 				this.state = 33;
@@ -277,7 +282,7 @@ export default class MDQLParser extends Parser {
 			{
 			this.state = 44;
 			_la = this._input.LA(1);
-			if(!(_la===7 || _la===8)) {
+			if(!(_la===9 || _la===10)) {
 			this._errHandler.recoverInline(this);
 			}
 			else {
@@ -301,19 +306,19 @@ export default class MDQLParser extends Parser {
 		return localctx;
 	}
 
-	public static readonly _serializedATN: number[] = [4,1,16,47,2,0,7,0,2,
+	public static readonly _serializedATN: number[] = [4,1,18,47,2,0,7,0,2,
 	1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,1,0,1,0,1,0,1,0,1,0,1,0,3,0,19,8,
 	0,1,0,1,0,1,1,1,1,1,2,1,2,1,2,5,2,28,8,2,10,2,12,2,31,9,2,1,3,1,3,1,3,5,
 	3,36,8,3,10,3,12,3,39,9,3,1,4,1,4,1,4,1,4,1,5,1,5,1,5,0,0,6,0,2,4,6,8,10,
-	0,2,1,0,9,11,1,0,7,8,43,0,12,1,0,0,0,2,22,1,0,0,0,4,24,1,0,0,0,6,32,1,0,
-	0,0,8,40,1,0,0,0,10,44,1,0,0,0,12,13,3,2,1,0,13,14,3,4,2,0,14,15,5,12,0,
-	0,15,18,3,10,5,0,16,17,5,13,0,0,17,19,3,6,3,0,18,16,1,0,0,0,18,19,1,0,0,
-	0,19,20,1,0,0,0,20,21,5,0,0,1,21,1,1,0,0,0,22,23,7,0,0,0,23,3,1,0,0,0,24,
-	29,5,15,0,0,25,26,5,1,0,0,26,28,5,15,0,0,27,25,1,0,0,0,28,31,1,0,0,0,29,
-	27,1,0,0,0,29,30,1,0,0,0,30,5,1,0,0,0,31,29,1,0,0,0,32,37,3,8,4,0,33,34,
-	5,14,0,0,34,36,3,8,4,0,35,33,1,0,0,0,36,39,1,0,0,0,37,35,1,0,0,0,37,38,
-	1,0,0,0,38,7,1,0,0,0,39,37,1,0,0,0,40,41,5,15,0,0,41,42,5,2,0,0,42,43,5,
-	16,0,0,43,9,1,0,0,0,44,45,7,1,0,0,45,11,1,0,0,0,3,18,29,37];
+	0,2,1,0,11,13,1,0,9,10,43,0,12,1,0,0,0,2,22,1,0,0,0,4,24,1,0,0,0,6,32,1,
+	0,0,0,8,40,1,0,0,0,10,44,1,0,0,0,12,13,3,2,1,0,13,14,3,4,2,0,14,15,5,14,
+	0,0,15,18,3,10,5,0,16,17,5,15,0,0,17,19,3,6,3,0,18,16,1,0,0,0,18,19,1,0,
+	0,0,19,20,1,0,0,0,20,21,5,0,0,1,21,1,1,0,0,0,22,23,7,0,0,0,23,3,1,0,0,0,
+	24,29,5,17,0,0,25,26,5,1,0,0,26,28,5,17,0,0,27,25,1,0,0,0,28,31,1,0,0,0,
+	29,27,1,0,0,0,29,30,1,0,0,0,30,5,1,0,0,0,31,29,1,0,0,0,32,37,3,8,4,0,33,
+	34,5,16,0,0,34,36,3,8,4,0,35,33,1,0,0,0,36,39,1,0,0,0,37,35,1,0,0,0,37,
+	38,1,0,0,0,38,7,1,0,0,0,39,37,1,0,0,0,40,41,5,17,0,0,41,42,5,2,0,0,42,43,
+	5,18,0,0,43,9,1,0,0,0,44,45,7,1,0,0,45,11,1,0,0,0,3,18,29,37];
 
 	private static __ATN: ATN;
 	public static get _ATN(): ATN {

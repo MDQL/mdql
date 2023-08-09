@@ -24,6 +24,11 @@ export class QueryExecutor {
         );
     }
 
+    //Execute filters
+    for (const filter of query.filter) {
+      data = filter.apply(data);
+    }
+
     //Filter based on fields array
     data = data.map((d) => {
       const filteredObject: Record<string, any> = {};
@@ -38,11 +43,6 @@ export class QueryExecutor {
       }
       return filteredObject;
     });
-
-    //Execute filters
-    for (const filter of query.filter) {
-      data = filter.apply(data);
-    }
 
     return new QueryResult(query, data);
   }

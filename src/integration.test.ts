@@ -1,10 +1,8 @@
-import { fail } from "assert";
 import { CombinedDataSource } from "./data-sources/combined-data-source";
 import { DataSource } from "./data-sources/data-source";
 import { DocumentRepository } from "./data-sources/document-repository";
 import { Document } from "./entities/document";
 import { Task } from "./entities/task";
-import exp from "constants";
 
 describe("integration tests", () => {
   it("Index md directory and merge with another datasource", async () => {

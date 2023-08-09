@@ -12,6 +12,7 @@ This query shows the same data, but rendered as table
 TABLE status,text FROM tasks
 ```
 
+
 Show only open tasks as tasklist
 
 ```mdql
