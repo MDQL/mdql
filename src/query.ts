@@ -35,6 +35,32 @@ export namespace Operator {
   }
 }
 
+export enum SortOrder {
+  ASC,
+  DESC,
+}
+export class Sorter {
+  constructor(
+    public readonly field: string,
+    private readonly order: SortOrder
+  ) {}
+
+  apply<T extends KeyValueObject>(data: T[]): T[] {
+    return data.sort((a, b) => {
+      const aVal = a[this.field];
+      const bVal = b[this.field];
+      switch (this.order) {
+        case SortOrder.ASC:
+          return aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+        case SortOrder.DESC:
+          return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+        default:
+          return 0;
+      }
+    });
+  }
+}
+
 export class Filter {
   constructor(
     public readonly key: string,
@@ -66,7 +92,8 @@ export class Query {
     public readonly view: ViewType,
     public readonly fields: string[],
     public readonly table: Table,
-    public readonly filter: Filter[]
+    public readonly filter: Filter[],
+    public readonly sorter?: Sorter
   ) {}
 
   static parse(s: string): Query {
@@ -95,9 +122,15 @@ export class Query {
             f.STRING_LITERAL().getText().slice(1, -1)
           )
       );
-
+    let sorter: Sorter | undefined = undefined;
+    if (query.sort_clause() !== null) {
+      const order =
+        query.sort_clause().DESC() !== null ? SortOrder.DESC : SortOrder.ASC;
+      const field = query.sort_clause().FIELD().getText();
+      sorter = new Sorter(field, order);
+    }
     const pView = ViewType.parse(view);
     const pTable = Table.parse(table);
-    return new Query(pView, fields, pTable, filters || []);
+    return new Query(pView, fields, pTable, filters || [], sorter);
   }
 }

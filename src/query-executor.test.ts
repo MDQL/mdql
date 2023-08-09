@@ -1,5 +1,5 @@
 import { DataSource } from "./data-sources/data-source";
-import { Filter, Operator, Query } from "./query";
+import { Filter, Operator, Query, SortOrder, Sorter } from "./query";
 import { QueryExecutor } from "./query-executor";
 import { Table } from "./table";
 import { ViewType } from "./view-type";
@@ -36,6 +36,45 @@ describe("QueryExecutor", () => {
     },
   };
 
+  it("shall sort results DESC", () => {
+    const testling = new QueryExecutor(ds);
+    const result = testling
+      .execute(
+        new Query(
+          ViewType.LIST,
+          ["text"],
+          Table.TASKS,
+          [],
+          new Sorter("text", SortOrder.DESC)
+        )
+      )
+      .raw();
+    expect(result).toMatchObject([
+      { text: "third" },
+      { text: "test" },
+      { text: "second" },
+    ]);
+  });
+
+  it("shall sort results ASC", () => {
+    const testling = new QueryExecutor(ds);
+    const result = testling
+      .execute(
+        new Query(
+          ViewType.LIST,
+          ["text"],
+          Table.TASKS,
+          [],
+          new Sorter("text", SortOrder.ASC)
+        )
+      )
+      .raw();
+    expect(result).toMatchObject([
+      { text: "second" },
+      { text: "test" },
+      { text: "third" },
+    ]);
+  });
   it("shall support status selection of tasks", () => {
     const testling = new QueryExecutor(ds);
     const result = testling

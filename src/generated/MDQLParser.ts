@@ -33,15 +33,18 @@ export default class MDQLParser extends Parser {
 	public static readonly FROM = 14;
 	public static readonly WHERE = 15;
 	public static readonly AND = 16;
-	public static readonly FIELD = 17;
-	public static readonly STRING_LITERAL = 18;
+	public static readonly SORT = 17;
+	public static readonly DESC = 18;
+	public static readonly FIELD = 19;
+	public static readonly STRING_LITERAL = 20;
 	public static readonly EOF = Token.EOF;
 	public static readonly RULE_query = 0;
 	public static readonly RULE_view = 1;
 	public static readonly RULE_fields = 2;
 	public static readonly RULE_filters = 3;
-	public static readonly RULE_attr_filter = 4;
-	public static readonly RULE_table = 5;
+	public static readonly RULE_sort_clause = 4;
+	public static readonly RULE_attr_filter = 5;
+	public static readonly RULE_table = 6;
 	public static readonly literalNames: (string | null)[] = [ null, "','", 
                                                             null, "'='", 
                                                             "'!='", "'=~'", 
@@ -60,11 +63,12 @@ export default class MDQLParser extends Parser {
                                                              "TASKLIST", 
                                                              "LIST", "TABLE", 
                                                              "FROM", "WHERE", 
-                                                             "AND", "FIELD", 
+                                                             "AND", "SORT", 
+                                                             "DESC", "FIELD", 
                                                              "STRING_LITERAL" ];
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
-		"query", "view", "fields", "filters", "attr_filter", "table",
+		"query", "view", "fields", "filters", "sort_clause", "attr_filter", "table",
 	];
 	public get grammarFileName(): string { return "MDQL.g4"; }
 	public get literalNames(): (string | null)[] { return MDQLParser.literalNames; }
@@ -88,27 +92,37 @@ export default class MDQLParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 12;
-			this.view();
-			this.state = 13;
-			this.fields();
 			this.state = 14;
-			this.match(MDQLParser.FROM);
+			this.view();
 			this.state = 15;
+			this.fields();
+			this.state = 16;
+			this.match(MDQLParser.FROM);
+			this.state = 17;
 			this.table();
-			this.state = 18;
+			this.state = 20;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la===15) {
 				{
-				this.state = 16;
+				this.state = 18;
 				this.match(MDQLParser.WHERE);
-				this.state = 17;
+				this.state = 19;
 				this.filters();
 				}
 			}
 
-			this.state = 20;
+			this.state = 23;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la===17) {
+				{
+				this.state = 22;
+				this.sort_clause();
+				}
+			}
+
+			this.state = 25;
 			this.match(MDQLParser.EOF);
 			}
 		}
@@ -134,7 +148,7 @@ export default class MDQLParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 22;
+			this.state = 27;
 			_la = this._input.LA(1);
 			if(!((((_la) & ~0x1F) === 0 && ((1 << _la) & 14336) !== 0))) {
 			this._errHandler.recoverInline(this);
@@ -167,21 +181,21 @@ export default class MDQLParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 24;
-			this.match(MDQLParser.FIELD);
 			this.state = 29;
+			this.match(MDQLParser.FIELD);
+			this.state = 34;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			while (_la===1) {
 				{
 				{
-				this.state = 25;
+				this.state = 30;
 				this.match(MDQLParser.T__0);
-				this.state = 26;
+				this.state = 31;
 				this.match(MDQLParser.FIELD);
 				}
 				}
-				this.state = 31;
+				this.state = 36;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
@@ -209,21 +223,21 @@ export default class MDQLParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 32;
-			this.attr_filter();
 			this.state = 37;
+			this.attr_filter();
+			this.state = 42;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			while (_la===16) {
 				{
 				{
-				this.state = 33;
+				this.state = 38;
 				this.match(MDQLParser.AND);
-				this.state = 34;
+				this.state = 39;
 				this.attr_filter();
 				}
 				}
-				this.state = 39;
+				this.state = 44;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
@@ -244,17 +258,55 @@ export default class MDQLParser extends Parser {
 		return localctx;
 	}
 	// @RuleVersion(0)
-	public attr_filter(): Attr_filterContext {
-		let localctx: Attr_filterContext = new Attr_filterContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 8, MDQLParser.RULE_attr_filter);
+	public sort_clause(): Sort_clauseContext {
+		let localctx: Sort_clauseContext = new Sort_clauseContext(this, this._ctx, this.state);
+		this.enterRule(localctx, 8, MDQLParser.RULE_sort_clause);
+		let _la: number;
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 40;
+			this.state = 45;
+			this.match(MDQLParser.SORT);
+			this.state = 46;
 			this.match(MDQLParser.FIELD);
-			this.state = 41;
+			this.state = 48;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la===18) {
+				{
+				this.state = 47;
+				this.match(MDQLParser.DESC);
+				}
+			}
+
+			}
+		}
+		catch (re) {
+			if (re instanceof RecognitionException) {
+				localctx.exception = re;
+				this._errHandler.reportError(this, re);
+				this._errHandler.recover(this, re);
+			} else {
+				throw re;
+			}
+		}
+		finally {
+			this.exitRule();
+		}
+		return localctx;
+	}
+	// @RuleVersion(0)
+	public attr_filter(): Attr_filterContext {
+		let localctx: Attr_filterContext = new Attr_filterContext(this, this._ctx, this.state);
+		this.enterRule(localctx, 10, MDQLParser.RULE_attr_filter);
+		try {
+			this.enterOuterAlt(localctx, 1);
+			{
+			this.state = 50;
+			this.match(MDQLParser.FIELD);
+			this.state = 51;
 			this.match(MDQLParser.COMPARE_OPERATOR);
-			this.state = 42;
+			this.state = 52;
 			this.match(MDQLParser.STRING_LITERAL);
 			}
 		}
@@ -275,12 +327,12 @@ export default class MDQLParser extends Parser {
 	// @RuleVersion(0)
 	public table(): TableContext {
 		let localctx: TableContext = new TableContext(this, this._ctx, this.state);
-		this.enterRule(localctx, 10, MDQLParser.RULE_table);
+		this.enterRule(localctx, 12, MDQLParser.RULE_table);
 		let _la: number;
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 44;
+			this.state = 54;
 			_la = this._input.LA(1);
 			if(!(_la===9 || _la===10)) {
 			this._errHandler.recoverInline(this);
@@ -306,19 +358,22 @@ export default class MDQLParser extends Parser {
 		return localctx;
 	}
 
-	public static readonly _serializedATN: number[] = [4,1,18,47,2,0,7,0,2,
-	1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,1,0,1,0,1,0,1,0,1,0,1,0,3,0,19,8,
-	0,1,0,1,0,1,1,1,1,1,2,1,2,1,2,5,2,28,8,2,10,2,12,2,31,9,2,1,3,1,3,1,3,5,
-	3,36,8,3,10,3,12,3,39,9,3,1,4,1,4,1,4,1,4,1,5,1,5,1,5,0,0,6,0,2,4,6,8,10,
-	0,2,1,0,11,13,1,0,9,10,43,0,12,1,0,0,0,2,22,1,0,0,0,4,24,1,0,0,0,6,32,1,
-	0,0,0,8,40,1,0,0,0,10,44,1,0,0,0,12,13,3,2,1,0,13,14,3,4,2,0,14,15,5,14,
-	0,0,15,18,3,10,5,0,16,17,5,15,0,0,17,19,3,6,3,0,18,16,1,0,0,0,18,19,1,0,
-	0,0,19,20,1,0,0,0,20,21,5,0,0,1,21,1,1,0,0,0,22,23,7,0,0,0,23,3,1,0,0,0,
-	24,29,5,17,0,0,25,26,5,1,0,0,26,28,5,17,0,0,27,25,1,0,0,0,28,31,1,0,0,0,
-	29,27,1,0,0,0,29,30,1,0,0,0,30,5,1,0,0,0,31,29,1,0,0,0,32,37,3,8,4,0,33,
-	34,5,16,0,0,34,36,3,8,4,0,35,33,1,0,0,0,36,39,1,0,0,0,37,35,1,0,0,0,37,
-	38,1,0,0,0,38,7,1,0,0,0,39,37,1,0,0,0,40,41,5,17,0,0,41,42,5,2,0,0,42,43,
-	5,18,0,0,43,9,1,0,0,0,44,45,7,1,0,0,45,11,1,0,0,0,3,18,29,37];
+	public static readonly _serializedATN: number[] = [4,1,20,57,2,0,7,0,2,
+	1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,1,0,1,0,1,0,1,0,1,0,1,0,3,
+	0,21,8,0,1,0,3,0,24,8,0,1,0,1,0,1,1,1,1,1,2,1,2,1,2,5,2,33,8,2,10,2,12,
+	2,36,9,2,1,3,1,3,1,3,5,3,41,8,3,10,3,12,3,44,9,3,1,4,1,4,1,4,3,4,49,8,4,
+	1,5,1,5,1,5,1,5,1,6,1,6,1,6,0,0,7,0,2,4,6,8,10,12,0,2,1,0,11,13,1,0,9,10,
+	54,0,14,1,0,0,0,2,27,1,0,0,0,4,29,1,0,0,0,6,37,1,0,0,0,8,45,1,0,0,0,10,
+	50,1,0,0,0,12,54,1,0,0,0,14,15,3,2,1,0,15,16,3,4,2,0,16,17,5,14,0,0,17,
+	20,3,12,6,0,18,19,5,15,0,0,19,21,3,6,3,0,20,18,1,0,0,0,20,21,1,0,0,0,21,
+	23,1,0,0,0,22,24,3,8,4,0,23,22,1,0,0,0,23,24,1,0,0,0,24,25,1,0,0,0,25,26,
+	5,0,0,1,26,1,1,0,0,0,27,28,7,0,0,0,28,3,1,0,0,0,29,34,5,19,0,0,30,31,5,
+	1,0,0,31,33,5,19,0,0,32,30,1,0,0,0,33,36,1,0,0,0,34,32,1,0,0,0,34,35,1,
+	0,0,0,35,5,1,0,0,0,36,34,1,0,0,0,37,42,3,10,5,0,38,39,5,16,0,0,39,41,3,
+	10,5,0,40,38,1,0,0,0,41,44,1,0,0,0,42,40,1,0,0,0,42,43,1,0,0,0,43,7,1,0,
+	0,0,44,42,1,0,0,0,45,46,5,17,0,0,46,48,5,19,0,0,47,49,5,18,0,0,48,47,1,
+	0,0,0,48,49,1,0,0,0,49,9,1,0,0,0,50,51,5,19,0,0,51,52,5,2,0,0,52,53,5,20,
+	0,0,53,11,1,0,0,0,54,55,7,1,0,0,55,13,1,0,0,0,5,20,23,34,42,48];
 
 	private static __ATN: ATN;
 	public static get _ATN(): ATN {
@@ -359,6 +414,9 @@ export class QueryContext extends ParserRuleContext {
 	}
 	public filters(): FiltersContext {
 		return this.getTypedRuleContext(FiltersContext, 0) as FiltersContext;
+	}
+	public sort_clause(): Sort_clauseContext {
+		return this.getTypedRuleContext(Sort_clauseContext, 0) as Sort_clauseContext;
 	}
     public get ruleIndex(): number {
     	return MDQLParser.RULE_query;
@@ -461,6 +519,36 @@ export class FiltersContext extends ParserRuleContext {
 	public exitRule(listener: MDQLListener): void {
 	    if(listener.exitFilters) {
 	 		listener.exitFilters(this);
+		}
+	}
+}
+
+
+export class Sort_clauseContext extends ParserRuleContext {
+	constructor(parser?: MDQLParser, parent?: ParserRuleContext, invokingState?: number) {
+		super(parent, invokingState);
+    	this.parser = parser;
+	}
+	public SORT(): TerminalNode {
+		return this.getToken(MDQLParser.SORT, 0);
+	}
+	public FIELD(): TerminalNode {
+		return this.getToken(MDQLParser.FIELD, 0);
+	}
+	public DESC(): TerminalNode {
+		return this.getToken(MDQLParser.DESC, 0);
+	}
+    public get ruleIndex(): number {
+    	return MDQLParser.RULE_sort_clause;
+	}
+	public enterRule(listener: MDQLListener): void {
+	    if(listener.enterSort_clause) {
+	 		listener.enterSort_clause(this);
+		}
+	}
+	public exitRule(listener: MDQLListener): void {
+	    if(listener.exitSort_clause) {
+	 		listener.exitSort_clause(this);
 		}
 	}
 }

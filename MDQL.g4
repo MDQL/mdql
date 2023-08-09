@@ -1,9 +1,11 @@
 grammar MDQL;
 
-query: view fields FROM table (WHERE filters)? EOF;
+query:
+	view fields FROM table (WHERE filters)? (sort_clause)? EOF;
 view: TASKLIST | LIST | TABLE;
 fields: FIELD (',' FIELD)*;
 filters: attr_filter (AND attr_filter)*;
+sort_clause: SORT FIELD DESC?;
 attr_filter: FIELD COMPARE_OPERATOR STRING_LITERAL;
 table: TASKS | DOCUMENTS;
 
@@ -28,5 +30,7 @@ TABLE: ('table' | 'TABLE');
 FROM: ('from' | 'FROM');
 WHERE: ('where' | 'WHERE');
 AND: ('and' | 'AND');
+SORT: ('sort' | 'SORT');
+DESC: ('desc' | 'DESC');
 FIELD: [a-zA-Z0-9.]+;
 STRING_LITERAL: '\'' ( ~'\'' | '\'\'')* '\'';

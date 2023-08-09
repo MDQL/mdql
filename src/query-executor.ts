@@ -29,7 +29,12 @@ export class QueryExecutor {
       data = filter.apply(data);
     }
 
-    //Filter based on fields array
+    //Sort data
+    if (query.sorter) {
+      data = query.sorter.apply(data);
+    }
+
+    //Select fields based on fields array
     data = data.map((d) => {
       const filteredObject: Record<string, any> = {};
       for (const key of query.fields) {

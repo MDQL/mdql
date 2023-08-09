@@ -11,6 +11,14 @@ Test-Data for Tasks parsing
 
 ### Level 3 Headline
 
+```javascript
+//A javascript codeblock
+```
+
+```
+some codeblock without infostring
+```
+
 ###### Level 6 Headline
 
 - TreeRoot

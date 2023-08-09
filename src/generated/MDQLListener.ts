@@ -7,6 +7,7 @@ import { QueryContext } from "./MDQLParser";
 import { ViewContext } from "./MDQLParser";
 import { FieldsContext } from "./MDQLParser";
 import { FiltersContext } from "./MDQLParser";
+import { Sort_clauseContext } from "./MDQLParser";
 import { Attr_filterContext } from "./MDQLParser";
 import { TableContext } from "./MDQLParser";
 
@@ -56,6 +57,16 @@ export default class MDQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitFilters?: (ctx: FiltersContext) => void;
+	/**
+	 * Enter a parse tree produced by `MDQLParser.sort_clause`.
+	 * @param ctx the parse tree
+	 */
+	enterSort_clause?: (ctx: Sort_clauseContext) => void;
+	/**
+	 * Exit a parse tree produced by `MDQLParser.sort_clause`.
+	 * @param ctx the parse tree
+	 */
+	exitSort_clause?: (ctx: Sort_clauseContext) => void;
 	/**
 	 * Enter a parse tree produced by `MDQLParser.attr_filter`.
 	 * @param ctx the parse tree
