@@ -11,7 +11,7 @@ export interface FrontMatter extends Entity {
 
 export namespace FrontMatter {
   export function parse(document: string) {
-    const regex = /---\n(?<content>.+?)\n---/gs;
+    const regex = /^---\n(?<content>.+?)\n---/gs;
     const matches = regex.exec(document);
     const content = matches?.groups?.["content"];
     if (content) {

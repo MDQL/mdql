@@ -4,6 +4,7 @@ import { FrontMatter } from "./frontmatter";
 import { Heading } from "./heading";
 import { Tag } from "./tag";
 import { Task } from "./task";
+import { createLogger } from "../logger";
 
 type Frontmatter = Record<string, any>;
 
@@ -39,6 +40,9 @@ export namespace Document {
     file: fs.PathOrFileDescriptor,
     content: string
   ): Document {
+    const log = createLogger("Document.parse");
+    log.debug(`Parsing document ${file.toString()}`);
+
     const uri = `file://${file.toString()}`;
     const tasks = Task.parse(uri, content);
     const headings = Heading.parse(content);

@@ -3,11 +3,13 @@ import { glob } from "glob";
 import { Document } from "../entities/document";
 import { Task } from "../entities/task";
 import { DataSource } from "./data-source";
+import { createLogger } from "../logger";
 
 /**
  * Datasource that scans a given folder for markdown files and indexes the matching ones
  */
 export class DocumentRepository implements DataSource {
+  private log = createLogger(DocumentRepository.name);
   private db: Document[] = [];
 
   constructor(private globPattern: string, private ignorePatterns?: string[]) {}
@@ -18,9 +20,11 @@ export class DocumentRepository implements DataSource {
 
   /** @override */
   async refresh() {
+    this.log.info(`Globbing for files matching ${this.globPattern}`);
     this.db = [];
     const files = await glob(this.globPattern, { ignore: this.ignorePatterns });
     for (const file of files) {
+      this.log.debug(`Parsing file ${file}`);
       const data = fs.readFileSync(file).toString();
 
       const doc = Document.parse(file, data);

@@ -3,8 +3,7 @@ import { Heading } from "./heading";
 import { Tag } from "./tag";
 import { Task } from "./task";
 
-const testdata = `
----
+const testdata = `---
 numvalue: 123
 svalue: "123"
 ---
@@ -20,6 +19,7 @@ Test-Data for Tasks parsing
 ## Level 2 Headline with #sometag
 
 ### Level 3 Headline
+
 
 ###### Level 6 Headline
 

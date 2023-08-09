@@ -1,4 +1,5 @@
-import { Entity, QueryableEntity } from "./entity";
+import { createLogger } from "../logger";
+import { QueryableEntity } from "./entity";
 import { Tag } from "./tag";
 
 /**
@@ -14,6 +15,8 @@ export interface Task extends QueryableEntity {
 
 export namespace Task {
   export function parse(documentUri: string, content: string): Task[] {
+    const log = createLogger("Task.parse");
+
     const tasks: Task[] = [];
     const regex = /- \[(?<checked>[xX ])\] (?<text>.+)/g;
     let match;
@@ -22,6 +25,7 @@ export namespace Task {
       const text = match.groups?.["text"] ?? "";
       const tags = Tag.parse(text);
       const status = checked ? "closed" : "open";
+      log.trace(`Found task at index ${match.index} with text ${text}`);
       tasks.push({ $checked: checked, text, tags, status, $uri: documentUri });
     }
 

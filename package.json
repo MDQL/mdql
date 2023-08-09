@@ -29,7 +29,8 @@
   "dependencies": {
     "antlr4": "^4.13.0",
     "glob": "^10.3.3",
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "pino": "^8.15.0"
   },
   "scripts": {
     "ci": "tsc -b",
