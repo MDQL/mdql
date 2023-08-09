@@ -3,7 +3,7 @@
 This query is going to show the description of all tasks as a list
 
 ```mdql
-LIST status,text FROM tasks
+LIST status,text FROM tasks SORT status DESC
 ```
 
 This query shows the same data, but rendered as table
