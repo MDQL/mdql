@@ -1,7 +1,7 @@
 {
   "name": "@mdql/mdql",
   "packageManager": "yarn@3.6.1",
-  "version": "0.0.5-alpha.33",
+  "version": "0.0.6",
   "license": "GPL-3.0-only",
   "keywords": [
     "markdown",

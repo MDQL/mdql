@@ -37,6 +37,7 @@ export default class MDQLParser extends Parser {
 	public static readonly DESC = 18;
 	public static readonly FIELD = 19;
 	public static readonly STRING_LITERAL = 20;
+	public static readonly WS = 21;
 	public static readonly EOF = Token.EOF;
 	public static readonly RULE_query = 0;
 	public static readonly RULE_view = 1;
@@ -65,7 +66,8 @@ export default class MDQLParser extends Parser {
                                                              "FROM", "WHERE", 
                                                              "AND", "SORT", 
                                                              "DESC", "FIELD", 
-                                                             "STRING_LITERAL" ];
+                                                             "STRING_LITERAL", 
+                                                             "WS" ];
 	// tslint:disable:no-trailing-whitespace
 	public static readonly ruleNames: string[] = [
 		"query", "view", "fields", "filters", "sort_clause", "attr_filter", "table",
@@ -358,7 +360,7 @@ export default class MDQLParser extends Parser {
 		return localctx;
 	}
 
-	public static readonly _serializedATN: number[] = [4,1,20,57,2,0,7,0,2,
+	public static readonly _serializedATN: number[] = [4,1,21,57,2,0,7,0,2,
 	1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,1,0,1,0,1,0,1,0,1,0,1,0,3,
 	0,21,8,0,1,0,3,0,24,8,0,1,0,1,0,1,1,1,1,1,2,1,2,1,2,5,2,33,8,2,10,2,12,
 	2,36,9,2,1,3,1,3,1,3,5,3,41,8,3,10,3,12,3,44,9,3,1,4,1,4,1,4,3,4,49,8,4,

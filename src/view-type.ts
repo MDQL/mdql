@@ -1,4 +1,4 @@
-import { ParseException } from "./parse-exception";
+import { ParseError } from "./parse-error";
 
 /**
  * Types of available output view renderings
@@ -19,6 +19,6 @@ export namespace ViewType {
     if (s.toLocaleLowerCase() === "tasklist") {
       return ViewType.TASKLIST;
     }
-    throw new ParseException(`View type '${s}' is unknown`);
+    throw new ParseError(`View type '${s}' is unknown`);
   }
 }

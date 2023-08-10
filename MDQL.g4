@@ -34,3 +34,4 @@ SORT: ('sort' | 'SORT');
 DESC: ('desc' | 'DESC');
 FIELD: [a-zA-Z0-9.]+;
 STRING_LITERAL: '\'' ( ~'\'' | '\'\'')* '\'';
+WS: [ \n\t\r]+ -> skip;

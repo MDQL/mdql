@@ -1,9 +1,10 @@
-import { CharStreams, CommonTokenStream } from "antlr4";
+import { CharStreams, CommonTokenStream, ErrorListener } from "antlr4";
 import MDQLLexer from "./generated/MDQLLexer";
 import MDQLParser from "./generated/MDQLParser";
-import { ParseException } from "./parse-exception";
 import { Table } from "./table";
 import { ViewType } from "./view-type";
+import { ParseError } from "./parse-error";
+import { Position } from "./position";
 
 export type KeyValueObject = {
   [key: string]: any;
@@ -30,7 +31,7 @@ export namespace Operator {
       case "=$":
         return Operator.ENDS_WITH;
       default:
-        throw new ParseException(`Unsupported operator '${s}'`);
+        throw new ParseError(`Unsupported operator '${s}'`);
     }
   }
 }
@@ -100,12 +101,30 @@ export class Query {
     const stream = CharStreams.fromString(s);
     const lexer = new MDQLLexer(stream);
 
+    lexer.addErrorListener({
+      syntaxError(recognizer, offendingSymbol, line, column, msg, e) {
+        throw new ParseError(
+          msg + " " + e?.message,
+          Position.fromLineAndCol(line, column, s)
+        );
+      },
+    });
     // Create a stream of tokens and give it to the parser
     const tokenStream = new CommonTokenStream(lexer);
     const parser = new MDQLParser(tokenStream);
     const query = parser.query();
 
-    const view = query.view().getText();
+    let view;
+    if (query.view().LIST()) {
+      view = ViewType.LIST;
+    } else if (query.view().TASKLIST()) {
+      view = ViewType.TASKLIST;
+    } else if (query.view().TABLE()) {
+      view = ViewType.TABLE;
+    } else {
+      throw new ParseError("Unsupported view type");
+    }
+
     const fields = query
       .fields()
       .FIELD_list()
@@ -129,8 +148,8 @@ export class Query {
       const field = query.sort_clause().FIELD().getText();
       sorter = new Sorter(field, order);
     }
-    const pView = ViewType.parse(view);
+
     const pTable = Table.parse(table);
-    return new Query(pView, fields, pTable, filters || [], sorter);
+    return new Query(view, fields, pTable, filters || [], sorter);
   }
 }

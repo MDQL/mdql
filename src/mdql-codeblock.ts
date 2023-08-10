@@ -1,34 +1,20 @@
 import { Query } from "./query";
-import { ParseException } from "./parse-exception";
-import { Position } from "./position";
+import { ParseError, isParseError } from "./parse-error";
+import { Position, Range } from "./position";
 
 const regex =
   /```(?<infostring>mdql( .*)?)\n(?<query>.+?)\n```(\n(?<content>(> .*\n?)+))?/g;
 
 export class MDQLCodeBlock {
   constructor(
-    /**
-     * The position of the code block in the document
-     */
-    private readonly _blockPos: Position,
-    /**
-     * The raw query as string
-     */
-    private readonly _rawQuery: string,
-    /**
-     * The position of the query in the document
-     */
-    private readonly _queryPos: Position,
-    /**
-     * Info string of codeblock
-     */
+    private readonly _blockPos: Range,
+    private readonly _rawQuery: string | undefined,
     private readonly _infoString: string,
-    private readonly _contentPos: Position,
-
+    private readonly _contentPos: Range,
     private readonly _query?: Query,
+    private readonly _queryPos?: Range,
     private readonly _content?: string,
-
-    private readonly _parseError?: unknown
+    private readonly _error?: ParseError
   ) {}
 
   /**
@@ -40,6 +26,13 @@ export class MDQLCodeBlock {
   }
 
   /**
+   * Get the error produced while parsing the query
+   */
+  get error(): ParseError | undefined {
+    return this._error;
+  }
+
+  /**
    * Get the injected content
    * @returns Injected content if there is any, undefined otherwise
    */
@@ -47,18 +40,18 @@ export class MDQLCodeBlock {
     return this._content;
   }
 
-  get rawQuery(): string {
+  get rawQuery(): string | undefined {
     return this._rawQuery;
   }
 
-  get queryPos(): Position {
+  get queryPos(): Range | undefined {
     return this._queryPos;
   }
   /**
    * Get the position of the whole codeblock (including injected content and query)
    * @returns Codeblock position
    */
-  get blockPos(): Position {
+  get blockPos(): Range {
     return this._blockPos;
   }
   /**
@@ -72,16 +65,8 @@ export class MDQLCodeBlock {
    * Get the position of the injected content
    * @returns Injected content position. If there is no injected content, returns the position a potential content shall be injected to
    */
-  get contentPos(): Position {
+  get contentPos(): Range {
     return this._contentPos;
-  }
-
-  /**
-   * Error description in case there was a parsing error
-   * @returns Error
-   */
-  get parseError(): unknown {
-    return this._parseError;
   }
 
   hasContent(): boolean {
@@ -95,54 +80,62 @@ export class MDQLCodeBlock {
    * @returns
    */
   private static parse(match: RegExpExecArray, s: string): MDQLCodeBlock {
-    const query = match?.groups?.["query"];
+    const rawQuery = match?.groups?.["query"];
     const content = match?.groups?.["content"];
     const infoString = match?.groups?.["infostring"] || "";
 
-    let error: unknown;
-    if (query) {
-      const queryStartIndex = s.indexOf(query);
-      const queryEndIndex = queryStartIndex + query?.length;
-      const queryPos = new Position(queryStartIndex, queryEndIndex);
+    const matchIndex = match.index;
+    const blockPos = Range.fromIndices(
+      matchIndex,
+      matchIndex + match[0].length
+    );
 
-      let contentPos;
-      if (content) {
-        const contentStartPos = s.indexOf(content);
-        const contentEndPos = contentStartPos + content.length;
-        contentPos = new Position(contentStartPos, contentEndPos);
-      } else {
-        const blockStartAndEndMarker = "```";
-        const index = s.indexOf(
-          blockStartAndEndMarker,
-          match.index + blockStartAndEndMarker.length
-        ); //find the index of the block closing
-        const pos = index + blockStartAndEndMarker.length;
-        contentPos = new Position(pos, pos); //Start and end are the same since there is no content
-      }
+    let error: ParseError | undefined;
+    let contentPos;
+    let query: Query | undefined = undefined;
+    let queryPos;
 
-      const matchIndex = match.index;
-      const blockPos = new Position(matchIndex, matchIndex + match[0].length);
-
-      let mdqlQuery: Query | undefined = undefined;
-      try {
-        mdqlQuery = Query.parse(query);
-      } catch (e) {
-        error = e;
-      }
-
-      return new MDQLCodeBlock(
-        blockPos,
-        query,
-        queryPos,
-        infoString,
-        contentPos,
-        mdqlQuery,
-        content,
-        error
-      );
+    if (content) {
+      const contentStartPos = s.indexOf(content);
+      const contentEndPos = contentStartPos + content.length;
+      contentPos = Range.fromIndices(contentStartPos, contentEndPos);
     } else {
-      throw new ParseException("No query string found");
+      const blockStartAndEndMarker = "```";
+      const index = s.indexOf(
+        blockStartAndEndMarker,
+        match.index + blockStartAndEndMarker.length
+      ); //find the index of the block closing
+      const pos = index + blockStartAndEndMarker.length;
+      contentPos = Range.fromIndices(pos, pos); //Start and end are the same since there is no content
     }
+
+    try {
+      if (rawQuery) {
+        const queryStartIndex = s.indexOf(rawQuery);
+        const queryEndIndex = queryStartIndex + rawQuery?.length;
+        queryPos = Range.fromIndices(queryStartIndex, queryEndIndex);
+
+        query = Query.parse(rawQuery);
+      } else {
+        throw new ParseError("No query string found", blockPos.start);
+      }
+    } catch (e) {
+      if (isParseError(e)) {
+        error = e;
+      } else {
+        throw e;
+      }
+    }
+    return new MDQLCodeBlock(
+      blockPos,
+      rawQuery,
+      infoString,
+      contentPos,
+      query,
+      queryPos,
+      content,
+      error
+    );
   }
 
   static scan(s: string): MDQLCodeBlock[] {

@@ -1,5 +1,5 @@
 import { DataSource } from "./data-sources/data-source";
-import { ParseException } from "./parse-exception";
+import { ParseError } from "./parse-error";
 import { KeyValueObject, Query } from "./query";
 import { QueryResult } from "./query-result";
 import { Table } from "./table";
@@ -19,7 +19,7 @@ export class QueryExecutor {
         data = this.dataSource.documents();
         break;
       default:
-        throw new ParseException(
+        throw new ParseError(
           `Executor doesn't support table '${query.table}' yet`
         );
     }
