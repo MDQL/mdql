@@ -3,7 +3,7 @@ import { ParseError, isParseError } from "./parse-error";
 import { Position, Range } from "./position";
 
 const regex =
-  /```(?<infostring>mdql( .*)?)\n(?<query>.+?)\n```(\n(?<content>(> .*\n?)+))?/g;
+  /```(?<infostring>mdql( .*)?)\n\s*(?<query>.+?)\s*\n```(\n(?<content>(> .*\n)+(> .*)))?/g;
 
 export class MDQLCodeBlock {
   constructor(
@@ -82,12 +82,13 @@ export class MDQLCodeBlock {
   private static parse(match: RegExpExecArray, s: string): MDQLCodeBlock {
     const rawQuery = match?.groups?.["query"];
     const content = match?.groups?.["content"];
-    const infoString = match?.groups?.["infostring"] || "";
+    const infoString = match?.groups?.["infostring"] ?? "";
 
     const matchIndex = match.index;
     const blockPos = Range.fromIndices(
       matchIndex,
-      matchIndex + match[0].length
+      matchIndex + match[0].length,
+      s
     );
 
     let error: ParseError | undefined;
@@ -98,7 +99,7 @@ export class MDQLCodeBlock {
     if (content) {
       const contentStartPos = s.indexOf(content);
       const contentEndPos = contentStartPos + content.length;
-      contentPos = Range.fromIndices(contentStartPos, contentEndPos);
+      contentPos = Range.fromIndices(contentStartPos, contentEndPos, s);
     } else {
       const blockStartAndEndMarker = "```";
       const index = s.indexOf(
@@ -106,14 +107,14 @@ export class MDQLCodeBlock {
         match.index + blockStartAndEndMarker.length
       ); //find the index of the block closing
       const pos = index + blockStartAndEndMarker.length;
-      contentPos = Range.fromIndices(pos, pos); //Start and end are the same since there is no content
+      contentPos = Range.fromIndices(pos, pos, s); //Start and end are the same since there is no content
     }
 
     try {
       if (rawQuery) {
         const queryStartIndex = s.indexOf(rawQuery);
         const queryEndIndex = queryStartIndex + rawQuery?.length;
-        queryPos = Range.fromIndices(queryStartIndex, queryEndIndex);
+        queryPos = Range.fromIndices(queryStartIndex, queryEndIndex, s);
 
         query = Query.parse(rawQuery);
       } else {

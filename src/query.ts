@@ -1,4 +1,10 @@
-import { CharStreams, CommonTokenStream, ErrorListener } from "antlr4";
+import {
+  CharStreams,
+  CommonTokenStream,
+  ErrorListener,
+  RecognitionException,
+  Recognizer,
+} from "antlr4";
 import MDQLLexer from "./generated/MDQLLexer";
 import MDQLParser from "./generated/MDQLParser";
 import { Table } from "./table";
@@ -88,6 +94,19 @@ export class Filter {
   }
 }
 
+class ThrowingErrorListener<T> implements ErrorListener<T> {
+  syntaxError(
+    recognizer: Recognizer<T>,
+    offendingSymbol: T,
+    line: number,
+    column: number,
+    msg: string,
+    e: RecognitionException | undefined
+  ): void {
+    column = column + 1; //Position columns are 1-based whereas ANTLR is 0-based
+    throw new ParseError(msg + " " + e?.message, new Position(line, column));
+  }
+}
 export class Query {
   constructor(
     public readonly view: ViewType,
@@ -101,17 +120,12 @@ export class Query {
     const stream = CharStreams.fromString(s);
     const lexer = new MDQLLexer(stream);
 
-    lexer.addErrorListener({
-      syntaxError(recognizer, offendingSymbol, line, column, msg, e) {
-        throw new ParseError(
-          msg + " " + e?.message,
-          Position.fromLineAndCol(line, column, s)
-        );
-      },
-    });
+    lexer.addErrorListener(new ThrowingErrorListener());
+
     // Create a stream of tokens and give it to the parser
     const tokenStream = new CommonTokenStream(lexer);
     const parser = new MDQLParser(tokenStream);
+    parser.addErrorListener(new ThrowingErrorListener());
     const query = parser.query();
 
     let view;
@@ -129,6 +143,7 @@ export class Query {
       .fields()
       .FIELD_list()
       .map((f) => f.getText().trim());
+
     const table = query.table().getText();
     const filters = query
       .filters()

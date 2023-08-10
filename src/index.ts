@@ -12,6 +12,7 @@ import { QueryResult } from "./query-result";
 import { DataSource } from "./data-sources/data-source";
 import { CombinedDataSource } from "./data-sources/combined-data-source";
 import { MDQLCodeBlock } from "./mdql-codeblock";
+import { Position, Range } from "./position";
 
 export {
   DocumentRepository,
@@ -28,4 +29,6 @@ export {
   DataSource,
   CombinedDataSource,
   MDQLCodeBlock,
+  Position,
+  Range,
 };

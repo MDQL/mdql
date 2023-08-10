@@ -1,4 +1,5 @@
 import { ParseError, isParseError } from "./parse-error";
+import { Position } from "./position";
 import { Operator, Query } from "./query";
 import { Table } from "./table";
 import { ViewType } from "./view-type";
@@ -25,7 +26,7 @@ describe("mdql-query", () => {
       Query.parse("LIST text, status @ FROM tasks");
     } catch (e) {
       expect(e).toBeTruthy();
-      expect((e as ParseError).pos?.index).toBe(18);
+      expect((e as ParseError).pos).toEqual(new Position(1, 19));
     }
   });
 
