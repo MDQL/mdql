@@ -96,35 +96,43 @@ export default class MDQLParser extends Parser {
 			{
 			this.state = 14;
 			this.view();
-			this.state = 15;
-			this.fields();
 			this.state = 16;
+			this._errHandler.sync(this);
+			_la = this._input.LA(1);
+			if (_la===19) {
+				{
+				this.state = 15;
+				this.fields();
+				}
+			}
+
+			this.state = 18;
 			this.match(MDQLParser.FROM);
-			this.state = 17;
+			this.state = 19;
 			this.table();
-			this.state = 20;
+			this.state = 22;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la===15) {
 				{
-				this.state = 18;
+				this.state = 20;
 				this.match(MDQLParser.WHERE);
-				this.state = 19;
+				this.state = 21;
 				this.filters();
 				}
 			}
 
-			this.state = 23;
+			this.state = 25;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la===17) {
 				{
-				this.state = 22;
+				this.state = 24;
 				this.sort_clause();
 				}
 			}
 
-			this.state = 25;
+			this.state = 27;
 			this.match(MDQLParser.EOF);
 			}
 		}
@@ -150,7 +158,7 @@ export default class MDQLParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 27;
+			this.state = 29;
 			_la = this._input.LA(1);
 			if(!((((_la) & ~0x1F) === 0 && ((1 << _la) & 14336) !== 0))) {
 			this._errHandler.recoverInline(this);
@@ -183,21 +191,21 @@ export default class MDQLParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 29;
+			this.state = 31;
 			this.match(MDQLParser.FIELD);
-			this.state = 34;
+			this.state = 36;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			while (_la===1) {
 				{
 				{
-				this.state = 30;
+				this.state = 32;
 				this.match(MDQLParser.T__0);
-				this.state = 31;
+				this.state = 33;
 				this.match(MDQLParser.FIELD);
 				}
 				}
-				this.state = 36;
+				this.state = 38;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
@@ -225,21 +233,21 @@ export default class MDQLParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 37;
+			this.state = 39;
 			this.attr_filter();
-			this.state = 42;
+			this.state = 44;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			while (_la===16) {
 				{
 				{
-				this.state = 38;
+				this.state = 40;
 				this.match(MDQLParser.AND);
-				this.state = 39;
+				this.state = 41;
 				this.attr_filter();
 				}
 				}
-				this.state = 44;
+				this.state = 46;
 				this._errHandler.sync(this);
 				_la = this._input.LA(1);
 			}
@@ -267,16 +275,16 @@ export default class MDQLParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 45;
+			this.state = 47;
 			this.match(MDQLParser.SORT);
-			this.state = 46;
-			this.match(MDQLParser.FIELD);
 			this.state = 48;
+			this.match(MDQLParser.FIELD);
+			this.state = 50;
 			this._errHandler.sync(this);
 			_la = this._input.LA(1);
 			if (_la===18) {
 				{
-				this.state = 47;
+				this.state = 49;
 				this.match(MDQLParser.DESC);
 				}
 			}
@@ -304,11 +312,11 @@ export default class MDQLParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 50;
-			this.match(MDQLParser.FIELD);
-			this.state = 51;
-			this.match(MDQLParser.COMPARE_OPERATOR);
 			this.state = 52;
+			this.match(MDQLParser.FIELD);
+			this.state = 53;
+			this.match(MDQLParser.COMPARE_OPERATOR);
+			this.state = 54;
 			this.match(MDQLParser.STRING_LITERAL);
 			}
 		}
@@ -334,7 +342,7 @@ export default class MDQLParser extends Parser {
 		try {
 			this.enterOuterAlt(localctx, 1);
 			{
-			this.state = 54;
+			this.state = 56;
 			_la = this._input.LA(1);
 			if(!(_la===9 || _la===10)) {
 			this._errHandler.recoverInline(this);
@@ -360,22 +368,23 @@ export default class MDQLParser extends Parser {
 		return localctx;
 	}
 
-	public static readonly _serializedATN: number[] = [4,1,21,57,2,0,7,0,2,
-	1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,1,0,1,0,1,0,1,0,1,0,1,0,3,
-	0,21,8,0,1,0,3,0,24,8,0,1,0,1,0,1,1,1,1,1,2,1,2,1,2,5,2,33,8,2,10,2,12,
-	2,36,9,2,1,3,1,3,1,3,5,3,41,8,3,10,3,12,3,44,9,3,1,4,1,4,1,4,3,4,49,8,4,
-	1,5,1,5,1,5,1,5,1,6,1,6,1,6,0,0,7,0,2,4,6,8,10,12,0,2,1,0,11,13,1,0,9,10,
-	54,0,14,1,0,0,0,2,27,1,0,0,0,4,29,1,0,0,0,6,37,1,0,0,0,8,45,1,0,0,0,10,
-	50,1,0,0,0,12,54,1,0,0,0,14,15,3,2,1,0,15,16,3,4,2,0,16,17,5,14,0,0,17,
-	20,3,12,6,0,18,19,5,15,0,0,19,21,3,6,3,0,20,18,1,0,0,0,20,21,1,0,0,0,21,
-	23,1,0,0,0,22,24,3,8,4,0,23,22,1,0,0,0,23,24,1,0,0,0,24,25,1,0,0,0,25,26,
-	5,0,0,1,26,1,1,0,0,0,27,28,7,0,0,0,28,3,1,0,0,0,29,34,5,19,0,0,30,31,5,
-	1,0,0,31,33,5,19,0,0,32,30,1,0,0,0,33,36,1,0,0,0,34,32,1,0,0,0,34,35,1,
-	0,0,0,35,5,1,0,0,0,36,34,1,0,0,0,37,42,3,10,5,0,38,39,5,16,0,0,39,41,3,
-	10,5,0,40,38,1,0,0,0,41,44,1,0,0,0,42,40,1,0,0,0,42,43,1,0,0,0,43,7,1,0,
-	0,0,44,42,1,0,0,0,45,46,5,17,0,0,46,48,5,19,0,0,47,49,5,18,0,0,48,47,1,
-	0,0,0,48,49,1,0,0,0,49,9,1,0,0,0,50,51,5,19,0,0,51,52,5,2,0,0,52,53,5,20,
-	0,0,53,11,1,0,0,0,54,55,7,1,0,0,55,13,1,0,0,0,5,20,23,34,42,48];
+	public static readonly _serializedATN: number[] = [4,1,21,59,2,0,7,0,2,
+	1,7,1,2,2,7,2,2,3,7,3,2,4,7,4,2,5,7,5,2,6,7,6,1,0,1,0,3,0,17,8,0,1,0,1,
+	0,1,0,1,0,3,0,23,8,0,1,0,3,0,26,8,0,1,0,1,0,1,1,1,1,1,2,1,2,1,2,5,2,35,
+	8,2,10,2,12,2,38,9,2,1,3,1,3,1,3,5,3,43,8,3,10,3,12,3,46,9,3,1,4,1,4,1,
+	4,3,4,51,8,4,1,5,1,5,1,5,1,5,1,6,1,6,1,6,0,0,7,0,2,4,6,8,10,12,0,2,1,0,
+	11,13,1,0,9,10,57,0,14,1,0,0,0,2,29,1,0,0,0,4,31,1,0,0,0,6,39,1,0,0,0,8,
+	47,1,0,0,0,10,52,1,0,0,0,12,56,1,0,0,0,14,16,3,2,1,0,15,17,3,4,2,0,16,15,
+	1,0,0,0,16,17,1,0,0,0,17,18,1,0,0,0,18,19,5,14,0,0,19,22,3,12,6,0,20,21,
+	5,15,0,0,21,23,3,6,3,0,22,20,1,0,0,0,22,23,1,0,0,0,23,25,1,0,0,0,24,26,
+	3,8,4,0,25,24,1,0,0,0,25,26,1,0,0,0,26,27,1,0,0,0,27,28,5,0,0,1,28,1,1,
+	0,0,0,29,30,7,0,0,0,30,3,1,0,0,0,31,36,5,19,0,0,32,33,5,1,0,0,33,35,5,19,
+	0,0,34,32,1,0,0,0,35,38,1,0,0,0,36,34,1,0,0,0,36,37,1,0,0,0,37,5,1,0,0,
+	0,38,36,1,0,0,0,39,44,3,10,5,0,40,41,5,16,0,0,41,43,3,10,5,0,42,40,1,0,
+	0,0,43,46,1,0,0,0,44,42,1,0,0,0,44,45,1,0,0,0,45,7,1,0,0,0,46,44,1,0,0,
+	0,47,48,5,17,0,0,48,50,5,19,0,0,49,51,5,18,0,0,50,49,1,0,0,0,50,51,1,0,
+	0,0,51,9,1,0,0,0,52,53,5,19,0,0,53,54,5,2,0,0,54,55,5,20,0,0,55,11,1,0,
+	0,0,56,57,7,1,0,0,57,13,1,0,0,0,6,16,22,25,36,44,50];
 
 	private static __ATN: ATN;
 	public static get _ATN(): ATN {
@@ -399,9 +408,6 @@ export class QueryContext extends ParserRuleContext {
 	public view(): ViewContext {
 		return this.getTypedRuleContext(ViewContext, 0) as ViewContext;
 	}
-	public fields(): FieldsContext {
-		return this.getTypedRuleContext(FieldsContext, 0) as FieldsContext;
-	}
 	public FROM(): TerminalNode {
 		return this.getToken(MDQLParser.FROM, 0);
 	}
@@ -410,6 +416,9 @@ export class QueryContext extends ParserRuleContext {
 	}
 	public EOF(): TerminalNode {
 		return this.getToken(MDQLParser.EOF, 0);
+	}
+	public fields(): FieldsContext {
+		return this.getTypedRuleContext(FieldsContext, 0) as FieldsContext;
 	}
 	public WHERE(): TerminalNode {
 		return this.getToken(MDQLParser.WHERE, 0);

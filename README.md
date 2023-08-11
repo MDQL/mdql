@@ -41,20 +41,37 @@ Output:
 ## Query language
 
 The query language is similar to SQL, but not compatible. The query structure is
-`[viewtype] [field1, field2,  ...] FROM [dataset] WHERE [condition]`
+`[viewtype] [field, ...] FROM [table] WHERE [condition [AND] ...]`
+
+`[viewtype]` defines how the results are rendered. It supports the following values:
+- `TABLE` Table output
+- `LIST` Bullet list output
+- `TASKLIST` Bullet list with checkboxes
+
+`[field, ...]` list of comma separated fields to be rendered. The value depends on the `table` selected. To access structured data, you may use the dot notation e.g. `field.subfield`. Omitting fields will return all available fields.
+
+`[table]` defines what type of data you want to access. It supports the following values:
+- `tasks` Tasks found in your workspace
+- `documents` Documents found in your workspace
+
+`[condition]` can be used to filter data. All conditions have the format `[field] [operator] '[value]'`. The following operators are supported:
+- `=` Check if field is equal to `[value]`
+- `!=` Check if field is not equal to `[value]`
+- `=~` Check if field or array contains `[value]`
+- `=$` Check if field ends with `[value]`
+- `=^` Check if field starts with `[value]`
+
 
 Examples:
 
 - `LIST status, text FROM tasks` - Lists the status and the text of all markdown tasks as bullet points
 - `TASKLIST text FROM tasks` - Creates a set
+- `LIST path FROM documents WHERE frontmatter.title = 'Daily Note'` - List all documents that have the frontmatter attribute `title` set to `Daily Note`
 
 See [testdata/query.md](./testdata/query.md) for more examples.
 
-### Available datasets
 
-- `tasks`
-- `documents`
-
+### Indexed information
 This module automatically indexes a given set of markdown files
 Currently we index the following facts:
 

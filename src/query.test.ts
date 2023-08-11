@@ -30,6 +30,28 @@ describe("mdql-query", () => {
     }
   });
 
+  it("shall parse hierarchical field names", () => {
+    const query = "LIST foo.bar.baz, status FROM tasks";
+    const testling = Query.parse(query);
+    expect(isParseError(testling)).toBeFalsy();
+    if (!isParseError(testling)) {
+      expect(testling.fields).toEqual(["foo.bar.baz", "status"]);
+      expect(testling.filter).toEqual([]);
+      expect(testling.table).toEqual(Table.TASKS);
+      expect(testling.view).toEqual(ViewType.LIST);
+    }
+  });
+  it("shall return all fields if none is specified", () => {
+    const query = "LIST FROM tasks";
+    const testling = Query.parse(query);
+    expect(isParseError(testling)).toBeFalsy();
+    if (!isParseError(testling)) {
+      expect(testling.fields).toEqual([]);
+      expect(testling.filter).toEqual([]);
+      expect(testling.table).toEqual(Table.TASKS);
+      expect(testling.view).toEqual(ViewType.LIST);
+    }
+  });
   it("parse query with all gizmos", () => {
     const query =
       "TASKLIST text, status, foo,Bar FROM tasks WHERE status='open' AND id !='123' AND text=~ 'hello' AND text=^'hell' AND text=$'llo' SORT status DESC";

@@ -1,7 +1,7 @@
 grammar MDQL;
 
 query:
-	view fields FROM table (WHERE filters)? (sort_clause)? EOF;
+	view (fields)? FROM table (WHERE filters)? (sort_clause)? EOF;
 view: TASKLIST | LIST | TABLE;
 fields: FIELD (',' FIELD)*;
 filters: attr_filter (AND attr_filter)*;

@@ -11,6 +11,7 @@ import { Table } from "./table";
 import { ViewType } from "./view-type";
 import { ParseError } from "./parse-error";
 import { Position } from "./position";
+import { Filter } from "./query-filter";
 
 export type KeyValueObject = {
   [key: string]: any;
@@ -68,32 +69,6 @@ export class Sorter {
   }
 }
 
-export class Filter {
-  constructor(
-    public readonly key: string,
-    public readonly operator: Operator,
-    public readonly value: any
-  ) {}
-
-  apply<T extends KeyValueObject>(data: T[]): T[] {
-    return data.filter((d) => {
-      const actualValue = d[this.key];
-      switch (this.operator) {
-        case Operator.EQUALS:
-          return actualValue === this.value;
-        case Operator.NOT_EQUALS:
-          return actualValue !== this.value;
-        case Operator.CONTAINS:
-          return (actualValue as string).includes(this.value);
-        case Operator.ENDS_WITH:
-          return (actualValue as string).endsWith(this.value);
-        case Operator.STARTS_WITH:
-          return (actualValue as string).startsWith(this.value);
-      }
-    });
-  }
-}
-
 class ThrowingErrorListener<T> implements ErrorListener<T> {
   syntaxError(
     recognizer: Recognizer<T>,
@@ -139,11 +114,13 @@ export class Query {
       throw new ParseError("Unsupported view type");
     }
 
-    const fields = query
-      .fields()
-      .FIELD_list()
-      .map((f) => f.getText().trim());
-
+    let fields: string[] = [];
+    if (query.fields()) {
+      fields = query
+        .fields()
+        .FIELD_list()
+        .map((f) => f.getText().trim());
+    }
     const table = query.table().getText();
     const filters = query
       .filters()

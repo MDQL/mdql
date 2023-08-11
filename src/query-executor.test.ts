@@ -1,6 +1,7 @@
 import { DataSource } from "./data-sources/data-source";
-import { Filter, Operator, Query, SortOrder, Sorter } from "./query";
+import { Operator, Query, SortOrder, Sorter } from "./query";
 import { QueryExecutor } from "./query-executor";
+import { Filter } from "./query-filter";
 import { Table } from "./table";
 import { ViewType } from "./view-type";
 
@@ -147,5 +148,45 @@ describe("QueryExecutor", () => {
       .execute(new Query(ViewType.TASKLIST, ["text"], Table.TASKS, []))
       .toMarkdown();
     expect(result).toEqual("> - [x] test\n> - [ ] second\n> - [ ] third");
+  });
+
+  it("shall allow selection of hierarchical fields", () => {
+    const ds: DataSource = {
+      tasks: () => [],
+      documents: () => [
+        {
+          $uri: "file://foo/bar.md",
+          frontMatter: {
+            foo: {
+              bar: {
+                baz: "hello",
+              },
+            },
+          },
+          headings: [],
+          path: "foo/bar.md",
+          tags: [],
+          tasks: [],
+          dataSource: "dummy",
+        },
+      ],
+      name: "dummy",
+      refresh() {
+        return Promise.resolve();
+      },
+    };
+
+    const testling = new QueryExecutor(ds);
+    const result = testling
+      .execute(
+        new Query(
+          ViewType.LIST,
+          ["frontmatter.foo.bar.baz"],
+          Table.DOCUMENTS,
+          []
+        )
+      )
+      .raw();
+    expect(result).toMatchObject([{ "frontmatter.foo.bar.baz": "hello" }]);
   });
 });
