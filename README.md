@@ -50,6 +50,8 @@ The query language is similar to SQL, but not compatible. The query structure is
 
 `[field, ...]` list of comma separated fields to be rendered. The value depends on the `table` selected. To access structured data, you may use the dot notation e.g. `field.subfield`. Omitting fields will return all available fields.
 
+You can rename fields for displaying them e.g. in table output. To do so use `<field> AS '<name>'` as field. The name will only affect the rendered output and cannot be used e.g. in conditions.
+
 `[table]` defines what type of data you want to access. It supports the following values:
 - `tasks` Tasks found in your workspace
 - `documents` Documents found in your workspace

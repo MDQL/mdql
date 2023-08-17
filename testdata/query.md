@@ -12,6 +12,11 @@ This query shows the same data, but rendered as table
 TABLE status,text FROM tasks
 ```
 
+You can also rename fields using the `AS` syntax:
+```mdql
+TABLE status AS 'State', text AS 'Task description' FROM tasks
+```
+
 
 Show only open tasks as tasklist
 
