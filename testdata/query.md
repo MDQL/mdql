@@ -24,6 +24,11 @@ Show only open tasks as tasklist
 TASKLIST status,text FROM tasks WHERE status='open'
 ```
 
+To list all available fields for a given table, just print the table fields using the following query:
+```mdql
+TABLE FROM tasks
+````
+
 ### Properties
 
 MQDL Codeblocks also support additional properties. You can add them right after `mqdl`.
