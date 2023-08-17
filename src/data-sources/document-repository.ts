@@ -22,7 +22,10 @@ export class DocumentRepository implements DataSource {
   async refresh() {
     this.log.info(`Globbing for files matching ${this.globPattern}`);
     this.db = [];
-    const files = await glob(this.globPattern, { ignore: this.ignorePatterns });
+    const files = await glob(this.globPattern, {
+      ignore: this.ignorePatterns,
+      windowsPathsNoEscape: true,
+    });
     for (const file of files) {
       this.log.debug(`Parsing file ${file}`);
       const data = fs.readFileSync(file).toString();
