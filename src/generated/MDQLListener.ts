@@ -6,6 +6,9 @@ import {ParseTreeListener} from "antlr4";
 import { QueryContext } from "./MDQLParser";
 import { ViewContext } from "./MDQLParser";
 import { FieldsContext } from "./MDQLParser";
+import { FieldContext } from "./MDQLParser";
+import { Aliased_fieldContext } from "./MDQLParser";
+import { AliasContext } from "./MDQLParser";
 import { FiltersContext } from "./MDQLParser";
 import { Sort_clauseContext } from "./MDQLParser";
 import { Attr_filterContext } from "./MDQLParser";
@@ -47,6 +50,36 @@ export default class MDQLListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	exitFields?: (ctx: FieldsContext) => void;
+	/**
+	 * Enter a parse tree produced by `MDQLParser.field`.
+	 * @param ctx the parse tree
+	 */
+	enterField?: (ctx: FieldContext) => void;
+	/**
+	 * Exit a parse tree produced by `MDQLParser.field`.
+	 * @param ctx the parse tree
+	 */
+	exitField?: (ctx: FieldContext) => void;
+	/**
+	 * Enter a parse tree produced by `MDQLParser.aliased_field`.
+	 * @param ctx the parse tree
+	 */
+	enterAliased_field?: (ctx: Aliased_fieldContext) => void;
+	/**
+	 * Exit a parse tree produced by `MDQLParser.aliased_field`.
+	 * @param ctx the parse tree
+	 */
+	exitAliased_field?: (ctx: Aliased_fieldContext) => void;
+	/**
+	 * Enter a parse tree produced by `MDQLParser.alias`.
+	 * @param ctx the parse tree
+	 */
+	enterAlias?: (ctx: AliasContext) => void;
+	/**
+	 * Exit a parse tree produced by `MDQLParser.alias`.
+	 * @param ctx the parse tree
+	 */
+	exitAlias?: (ctx: AliasContext) => void;
 	/**
 	 * Enter a parse tree produced by `MDQLParser.filters`.
 	 * @param ctx the parse tree

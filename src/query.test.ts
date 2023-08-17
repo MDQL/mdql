@@ -82,4 +82,16 @@ describe("mdql-query", () => {
       expect(testling.view).toEqual(ViewType.TASKLIST);
     }
   });
+
+  it("shall create alias map if aliases are given", () => {
+    const query = "TASKLIST text as 'desc', status as 'foo' FROM tasks";
+    const testling = Query.parse(query);
+    expect(isParseError(testling)).toBeFalsy();
+    if (!isParseError(testling)) {
+      expect(testling.fieldAliases).toEqual([
+        { field: "text", alias: "desc" },
+        { field: "status", alias: "foo" },
+      ]);
+    }
+  });
 });

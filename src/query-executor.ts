@@ -1,6 +1,6 @@
 import { DataSource } from "./data-sources/data-source";
 import { ParseError } from "./parse-error";
-import { KeyValueObject, Query } from "./query";
+import { FieldMapping, KeyValueObject, Query } from "./query";
 import { QueryResult } from "./query-result";
 import { Table } from "./table";
 
@@ -44,7 +44,8 @@ export class QueryExecutor {
         for (const key of query.fields) {
           const propName = getCaseInsensitivePropName(d, key);
           if (propName) {
-            filteredObject[key] = d[propName];
+            const aliasedKey = lookupAlias(key, query.fieldAliases);
+            filteredObject[aliasedKey] = d[propName];
           }
         }
         //force copying of all internal fields prefixed with $
@@ -87,4 +88,15 @@ function flattenObject(obj: any, parentKey = ""): Record<string, any> {
   }
 
   return result;
+}
+function lookupAlias(key: string, fieldAliases?: FieldMapping[]): string {
+  if (fieldAliases) {
+    for (const alias of fieldAliases) {
+      if (key === alias.field) {
+        return alias.alias;
+      }
+    }
+  }
+
+  return key;
 }

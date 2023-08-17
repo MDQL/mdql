@@ -150,6 +150,23 @@ describe("QueryExecutor", () => {
     expect(result).toEqual("> - [x] test\n> - [ ] second\n> - [ ] third");
   });
 
+  it("shall support aliases", () => {
+    const testling = new QueryExecutor(ds);
+    const result = testling
+      .execute(
+        new Query(
+          ViewType.LIST,
+          ["text"],
+          Table.TASKS,
+          [new Filter("text", Operator.EQUALS, "third")],
+          undefined,
+          [{ field: "text", alias: "some aliased title" }]
+        )
+      )
+      .raw();
+    expect(result).toMatchObject([{ "some aliased title": "third" }]);
+  });
+
   it("shall allow selection of hierarchical fields", () => {
     const ds: DataSource = {
       tasks: () => [],

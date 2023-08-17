@@ -82,13 +82,16 @@ class ThrowingErrorListener<T> implements ErrorListener<T> {
     throw new ParseError(msg + " " + e?.message, new Position(line, column));
   }
 }
+
+export type FieldMapping = { field: string; alias: string };
 export class Query {
   constructor(
     public readonly view: ViewType,
     public readonly fields: string[],
     public readonly table: Table,
     public readonly filter: Filter[],
-    public readonly sorter?: Sorter
+    public readonly sorter?: Sorter,
+    public readonly fieldAliases?: FieldMapping[]
   ) {}
 
   static parse(s: string): Query {
@@ -115,11 +118,23 @@ export class Query {
     }
 
     let fields: string[] = [];
+    let fieldAliases: FieldMapping[] = [];
     if (query.fields()) {
-      fields = query
-        .fields()
-        .FIELD_list()
-        .map((f) => f.getText().trim());
+      for (const field of query.fields().field_list()) {
+        if (field.aliased_field()) {
+          const fieldName = field.aliased_field().FIELD().getText();
+          const alias = field
+            .aliased_field()
+            .alias()
+            .STRING_LITERAL()
+            .getText()
+            .slice(1, -1);
+          fieldAliases.push({ field: fieldName, alias });
+          fields.push(fieldName);
+        } else {
+          fields.push(field.getText());
+        }
+      }
     }
     const table = query.table().getText();
     const filters = query
@@ -142,6 +157,6 @@ export class Query {
     }
 
     const pTable = Table.parse(table);
-    return new Query(view, fields, pTable, filters || [], sorter);
+    return new Query(view, fields, pTable, filters || [], sorter, fieldAliases);
   }
 }
