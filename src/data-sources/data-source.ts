@@ -1,6 +1,3 @@
-import { Document } from "./entities/document";
-import { Task } from "./entities/task";
-
 /**
  * Interface to be implemented by all data sources
  */

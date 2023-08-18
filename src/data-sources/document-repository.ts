@@ -1,8 +1,9 @@
 import fs from "fs";
 import { glob } from "glob";
+import { Document } from "../data-model";
 import { createLogger } from "../logger";
 import { DataSource } from "./data-source";
-import { Document } from "./entities/document";
+import { MarkdownParser } from "./markdown-parser";
 
 /**
  * Datasource that scans a given folder for markdown files and indexes the matching ones
@@ -29,10 +30,10 @@ export class DocumentRepository implements DataSource<Document> {
       this.log.debug(`Parsing file ${file}`);
       const data = fs.readFileSync(file).toString();
 
-      const doc = Document.parse(file, data);
+      const doc = MarkdownParser.parseDocument(file, data);
       this.db.push(doc);
     }
-    console.log(this.db.length + " documents found");
+    this.log.info(this.db.length + " documents found");
   }
 
   /** @override */

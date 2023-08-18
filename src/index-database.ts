@@ -9,7 +9,7 @@ import {
   Sequelize,
 } from "sequelize";
 import { DataSource } from "./data-sources/data-source";
-import { Document } from "./data-sources/entities/document";
+import { Document } from "./data-model/document";
 
 export class Task extends Model<
   InferAttributes<Task>,
@@ -59,10 +59,16 @@ export class Tag extends Model<
 }
 
 export class IndexDatabase {
-  private db = new Sequelize("sqlite::memory:");
+  private db: Sequelize;
+  public readonly Task: typeof Task;
+  public readonly tag: typeof Tag;
+  public readonly heading: typeof Heading;
+  public readonly MarkdownFile: typeof MarkdownFile;
 
-  constructor() {
-    Task.init(
+  constructor(connectionString: string = "sqlite::memory:") {
+    this.db = new Sequelize(connectionString);
+
+    this.Task = Task.init(
       {
         id: {
           type: DataTypes.INTEGER,
@@ -75,7 +81,7 @@ export class IndexDatabase {
       { sequelize: this.db }
     );
 
-    MarkdownFile.init(
+    this.MarkdownFile = MarkdownFile.init(
       {
         id: {
           type: DataTypes.INTEGER,
@@ -88,7 +94,7 @@ export class IndexDatabase {
       { sequelize: this.db }
     );
 
-    Heading.init(
+    this.heading = Heading.init(
       {
         id: {
           type: DataTypes.INTEGER,
@@ -100,7 +106,7 @@ export class IndexDatabase {
       },
       { sequelize: this.db }
     );
-    Tag.init(
+    this.tag = Tag.init(
       {
         id: {
           type: DataTypes.INTEGER,
@@ -127,8 +133,10 @@ export class IndexDatabase {
     //One to Many
     Task.hasMany(Tag);
     Tag.belongsTo(Task);
+  }
 
-    this.db.sync({ force: true });
+  async init() {
+    await this.db.sync({ force: true });
   }
 
   /**
@@ -144,15 +152,18 @@ export class IndexDatabase {
       await mdFile.save();
 
       for (const tag of doc.tags) {
-        mdFile.createTag({ text: tag.text });
+        await mdFile.createTag({ text: tag.text });
       }
 
       for (const heading of doc.headings) {
-        mdFile.createHeading({ text: heading.text, level: heading.level });
+        await mdFile.createHeading({
+          text: heading.text,
+          level: heading.level,
+        });
       }
 
       for (const task of doc.tasks) {
-        mdFile.createTask({ checked: task.checked, text: task.text });
+        await mdFile.createTask({ checked: task.checked, text: task.text });
       }
     }
   }

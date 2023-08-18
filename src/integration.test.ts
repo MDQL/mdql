@@ -1,7 +1,7 @@
 import { CombinedDataSource } from "./data-sources/combined-data-source";
 import { DataSource } from "./data-sources/data-source";
 import { DocumentRepository } from "./data-sources/document-repository";
-import { Document } from "./data-sources/entities/document";
+import { Document } from "./data-model/document";
 
 describe("integration tests", () => {
   it("Index md directory and merge with another datasource", async () => {

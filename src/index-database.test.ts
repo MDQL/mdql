@@ -1,4 +1,4 @@
-import { Document } from "./data-sources/entities/document";
+import { Document } from "./data-model/document";
 import { IndexDatabase } from "./index-database";
 
 describe("IndexDatabase", () => {

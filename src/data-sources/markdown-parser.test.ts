@@ -1,7 +1,5 @@
-import { Document } from "./document";
-import { Heading } from "./heading";
-import { Tag } from "./tag";
-import { Task } from "./task";
+import { Document, Heading, Tag, Task } from "../data-model";
+import { MarkdownParser } from "./markdown-parser";
 
 const testdata = `---
 numvalue: 123
@@ -31,9 +29,9 @@ Test-Data for Tasks parsing
     - Leaf 1.3.2
 `;
 
-describe("document parsing test", () => {
+describe("MarkdownParser", () => {
   it("happy path", () => {
-    const actual = Document.parse("test/mydocument.md", testdata);
+    const actual = MarkdownParser.parseDocument("test/mydocument.md", testdata);
     const expectedHeadings: Heading[] = [
       { level: 1, text: "Tasks Testdata", tags: [] },
       {

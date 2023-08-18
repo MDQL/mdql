@@ -1,5 +1,5 @@
 import { DataSource } from "./data-source";
-import { Document } from "./entities/document";
+import { Document } from "../data-model/document";
 
 export interface CombinedDsResult<T> {
   dataSource: string;

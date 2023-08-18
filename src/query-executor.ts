@@ -1,23 +1,24 @@
 import { DataSource } from "./data-sources/data-source";
-import { Document } from "./data-sources/entities/document";
+import { Document } from "./data-model/document";
 import { ParseError } from "./parse-error";
 import { FieldMapping, KeyValueObject, Query } from "./query";
 import { QueryResult } from "./query-result";
 import { Table } from "./table";
+import { IndexDatabase, MarkdownFile, Task } from "./index-database";
 
 export class QueryExecutor {
-  constructor(private dataSource: DataSource<Document>) {}
+  constructor(private index: IndexDatabase) {}
 
-  execute(query: Query): QueryResult {
+  async execute(query: Query): Promise<QueryResult> {
     let data: KeyValueObject[];
 
     //Get data from corresponding table
     switch (query.table) {
       case Table.TASKS:
-        data = this.dataSource.documents().flatMap((d) => d.tasks);
+        data = await this.index.Task.findAll();
         break;
       case Table.DOCUMENTS:
-        data = this.dataSource.documents();
+        data = await this.index.MarkdownFile.findAll();
         break;
       default:
         throw new ParseError(
