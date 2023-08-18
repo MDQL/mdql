@@ -1,7 +1,7 @@
 import fs from "fs";
 import { glob } from "glob";
-import { Document } from "../entities/document";
-import { Task } from "../entities/task";
+import { Document } from "../data-model/document";
+import { Task } from "../data-model/task";
 import { DataSource } from "./data-source";
 import { createLogger } from "../logger";
 

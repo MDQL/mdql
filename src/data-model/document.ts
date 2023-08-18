@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import { QueryableEntity } from "./entity";
+import { Entity } from "./entity";
 import { FrontMatter } from "./frontmatter";
 import { Heading } from "./heading";
 import { Tag } from "./tag";
@@ -10,13 +10,9 @@ type Frontmatter = Record<string, any>;
 
 /**
  * Entity for markdown documents
- * @category Entities
+ * @category Data-Model
  */
-export interface Document extends QueryableEntity {
-  /**
-   * Filepath of the markdown document
-   */
-  path: string;
+export interface Document extends Entity {
   /**
    * Tasks contained in the document
    */
@@ -33,6 +29,11 @@ export interface Document extends QueryableEntity {
    * Frontmatter of the document
    */
   frontMatter: Frontmatter | undefined;
+
+  /**
+   * URI of the document
+   */
+  uri: string;
 }
 
 export namespace Document {
@@ -50,8 +51,7 @@ export namespace Document {
     const frontMatter = FrontMatter.parse(content);
 
     return {
-      $uri: uri,
-      path: file.toString(),
+      uri: uri,
       headings,
       tasks,
       tags,

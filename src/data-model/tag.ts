@@ -2,7 +2,7 @@ import { Entity } from "./entity";
 
 /**
  * Tags
- * @category Entities
+ * @category Data-Model
  */
 export interface Tag extends Entity {
   text: string;

@@ -9,25 +9,19 @@ describe("QueryExecutor", () => {
   const ds: DataSource = {
     tasks: () => [
       {
-        $checked: true,
-        status: "closed",
+        checked: true,
         text: "test",
         tags: [],
-        $uri: "file://foo/bar.md",
       },
       {
-        $checked: false,
-        status: "open",
+        checked: false,
         text: "second",
         tags: [],
-        $uri: "file://foo/bar2.md",
       },
       {
-        $checked: false,
-        status: "open",
+        checked: false,
         text: "third",
         tags: [],
-        $uri: "file://foo/bar2.md",
       },
     ],
     documents: () => [],
@@ -93,8 +87,8 @@ describe("QueryExecutor", () => {
     const result = testling
       .execute(
         new Query(ViewType.LIST, ["text"], Table.TASKS, [
-          new Filter("$uri", Operator.ENDS_WITH, "bar2.md"),
-          new Filter("text", Operator.EQUALS, "third"),
+          new Filter("text", Operator.ENDS_WITH, "ird"),
+          new Filter("status", Operator.EQUALS, "open"),
         ])
       )
       .raw();
@@ -172,7 +166,7 @@ describe("QueryExecutor", () => {
       tasks: () => [],
       documents: () => [
         {
-          $uri: "file://foo/bar.md",
+          uri: "file://foo/bar.md",
           frontMatter: {
             foo: {
               bar: {
@@ -181,7 +175,6 @@ describe("QueryExecutor", () => {
             },
           },
           headings: [],
-          path: "foo/bar.md",
           tags: [],
           tasks: [],
           dataSource: "dummy",

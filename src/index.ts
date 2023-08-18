@@ -1,34 +1,34 @@
-import { DocumentRepository } from "./data-sources/document-repository";
-import { FrontMatter } from "./entities/frontmatter";
-import { Heading } from "./entities/heading";
-import { Tag } from "./entities/tag";
-import { Task } from "./entities/task";
-import { Query } from "./query";
-import { Table } from "./table";
-import { ViewType } from "./view-type";
-import { Document } from "./entities/document";
-import { QueryExecutor } from "./query-executor";
-import { QueryResult } from "./query-result";
-import { DataSource } from "./data-sources/data-source";
 import { CombinedDataSource } from "./data-sources/combined-data-source";
+import { DataSource } from "./data-sources/data-source";
+import { DocumentRepository } from "./data-sources/document-repository";
+import { Document } from "./data-model/document";
+import { FrontMatter } from "./data-model/frontmatter";
+import { Heading } from "./data-model/heading";
+import { Tag } from "./data-model/tag";
+import { Task } from "./data-model/task";
 import { MDQLCodeBlock } from "./mdql-codeblock";
 import { Position, Range } from "./position";
+import { Query } from "./query";
+import { QueryExecutor } from "./query-executor";
+import { QueryResult } from "./query-result";
+import { Table } from "./table";
+import { ViewType } from "./view-type";
 
 export {
+  CombinedDataSource,
+  DataSource,
+  Document,
   DocumentRepository,
-  Query,
-  QueryExecutor,
   FrontMatter,
   Heading,
-  Tag,
-  Task,
-  QueryResult,
-  ViewType,
-  Table,
-  Document,
-  DataSource,
-  CombinedDataSource,
   MDQLCodeBlock,
   Position,
+  Query,
+  QueryExecutor,
+  QueryResult,
   Range,
+  Table,
+  Tag,
+  Task,
+  ViewType,
 };

@@ -1,6 +1,6 @@
 import { DataSource } from "./data-source";
-import { Document } from "../entities/document";
-import { Task } from "../entities/task";
+import { Document } from "../data-model/document";
+import { Task } from "../data-model/task";
 
 export class CombinedDataSource implements DataSource {
   private datasources: DataSource[];

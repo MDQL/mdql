@@ -3,7 +3,7 @@ import { Tag } from "./tag";
 
 /**
  * Heading in a markdown document
- * @category Entities
+ * @category Data-Model
  */
 export interface Heading extends Entity {
   level: number;

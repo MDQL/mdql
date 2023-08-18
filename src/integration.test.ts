@@ -1,8 +1,8 @@
 import { CombinedDataSource } from "./data-sources/combined-data-source";
 import { DataSource } from "./data-sources/data-source";
 import { DocumentRepository } from "./data-sources/document-repository";
-import { Document } from "./entities/document";
-import { Task } from "./entities/task";
+import { Document } from "./data-model/document";
+import { Task } from "./data-model/task";
 
 describe("integration tests", () => {
   it("Index md directory and merge with another datasource", async () => {
@@ -17,11 +17,11 @@ describe("integration tests", () => {
           {
             frontMatter: {},
             headings: [],
-            path: "none",
+
             tags: [],
             tasks: [],
             dataSource: this.name,
-            $uri: "file://foo/bar.md",
+            uri: "file://foo/bar.md",
           },
         ];
         return data;
@@ -29,12 +29,10 @@ describe("integration tests", () => {
       tasks: function (): Task[] {
         const data: Task[] = [
           {
-            $checked: false,
-            status: "open",
+            checked: false,
             tags: [],
             text: "static task",
             dataSource: this.name,
-            $uri: "file://foo/bar.md",
           },
         ];
         return data;

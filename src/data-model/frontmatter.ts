@@ -3,7 +3,7 @@ import { Entity } from "./entity";
 
 /**
  * Entity for frontmatter in markdown documents
- * @category Entities
+ * @category Data-Model
  */
 export interface FrontMatter extends Entity {
   [k: string]: any;

@@ -46,25 +46,19 @@ describe("document parsing test", () => {
     ];
     const expectedTasks: Task[] = [
       {
-        $checked: false,
-        status: "open",
+        checked: false,
         text: "this is an unchecked Task",
         tags: [],
-        $uri: "file://test/mydocument.md",
       },
       {
-        $checked: true,
+        checked: true,
         text: "this is a checked Task with #a-tag123",
         tags: [{ text: "a-tag123" }],
-        status: "closed",
-        $uri: "file://test/mydocument.md",
       },
       {
-        $checked: true,
+        checked: true,
         text: "this is a checked Task with special characters [ ]",
         tags: [],
-        status: "closed",
-        $uri: "file://test/mydocument.md",
       },
     ];
 

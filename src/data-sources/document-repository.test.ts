@@ -10,8 +10,10 @@ describe("DocumentRepository", () => {
     const docs = docRepo.documents();
     expect(docs.length).toBe(3);
     expect(docs[0].dataSource).toBe("markdown");
-    expect(docs[0].path).toBe("testdata/testdata.md");
-    expect(docs[2].path).toBe("testdata/subfolder/some-other-document.md");
+    expect(docs[0].uri).toBe("file://testdata/testdata.md");
+    expect(docs[2].uri).toBe(
+      "file://testdata/subfolder/some-other-document.md"
+    );
     expect(docs[2].headings[0].level).toBe(1);
     expect(docs[2].headings[0].text).toBe("Another test document");
   });

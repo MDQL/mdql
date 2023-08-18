@@ -1,6 +1,8 @@
 import { DataSource } from "./data-sources/data-source";
 import { ParseError } from "./parse-error";
 import { FieldMapping, KeyValueObject, Query } from "./query";
+import { QueryableDocument } from "./query-model/queryable-document";
+import { QueryableTask } from "./query-model/queryable-task";
 import { QueryResult } from "./query-result";
 import { Table } from "./table";
 
@@ -13,10 +15,10 @@ export class QueryExecutor {
     //Get data from corresponding table
     switch (query.table) {
       case Table.TASKS:
-        data = this.dataSource.tasks();
+        data = this.dataSource.tasks().map(QueryableTask.fromTask);
         break;
       case Table.DOCUMENTS:
-        data = this.dataSource.documents();
+        data = this.dataSource.documents().map(QueryableDocument.fromDocument);
         break;
       default:
         throw new ParseError(
