@@ -1,4 +1,5 @@
 import { DataSource } from "./data-sources/data-source";
+import { Document } from "./data-sources/entities/document";
 import { Operator, Query, SortOrder, Sorter } from "./query";
 import { QueryExecutor } from "./query-executor";
 import { Filter } from "./query-filter";
@@ -6,31 +7,35 @@ import { Table } from "./table";
 import { ViewType } from "./view-type";
 
 describe("QueryExecutor", () => {
-  const ds: DataSource = {
-    tasks: () => [
+  const ds: DataSource<Document> = {
+    documents: () => [
       {
-        $checked: true,
-        status: "closed",
-        text: "test",
+        frontMatter: {},
+        headings: [],
         tags: [],
-        $uri: "file://foo/bar.md",
-      },
-      {
-        $checked: false,
-        status: "open",
-        text: "second",
-        tags: [],
-        $uri: "file://foo/bar2.md",
-      },
-      {
-        $checked: false,
-        status: "open",
-        text: "third",
-        tags: [],
-        $uri: "file://foo/bar2.md",
+        uri: "file://foo/bar2.md",
+        tasks: [
+          {
+            checked: true,
+
+            text: "test",
+            tags: [],
+          },
+          {
+            checked: false,
+
+            text: "second",
+            tags: [],
+          },
+          {
+            checked: false,
+
+            text: "third",
+            tags: [],
+          },
+        ],
       },
     ],
-    documents: () => [],
     name: "dummy",
     refresh() {
       return Promise.resolve();
@@ -76,6 +81,7 @@ describe("QueryExecutor", () => {
       { text: "third" },
     ]);
   });
+
   it("shall support status selection of tasks", () => {
     const testling = new QueryExecutor(ds);
     const result = testling
@@ -132,6 +138,7 @@ describe("QueryExecutor", () => {
       .toMarkdown();
     expect(result).toBe("> - test\n> - second\n> - third");
   });
+
   it("tests MD Table rendering", () => {
     const testling = new QueryExecutor(ds);
     const result = testling
@@ -168,11 +175,10 @@ describe("QueryExecutor", () => {
   });
 
   it("shall allow selection of hierarchical fields", () => {
-    const ds: DataSource = {
-      tasks: () => [],
+    const ds: DataSource<Document> = {
       documents: () => [
         {
-          $uri: "file://foo/bar.md",
+          uri: "file://foo/bar.md",
           frontMatter: {
             foo: {
               bar: {
@@ -181,10 +187,8 @@ describe("QueryExecutor", () => {
             },
           },
           headings: [],
-          path: "foo/bar.md",
           tags: [],
           tasks: [],
-          dataSource: "dummy",
         },
       ],
       name: "dummy",
@@ -205,5 +209,65 @@ describe("QueryExecutor", () => {
       )
       .raw();
     expect(result).toMatchObject([{ "frontmatter.foo.bar.baz": "hello" }]);
+  });
+
+  it("shall support selecting documents by contained tags", () => {
+    const ds: DataSource<Document> = {
+      documents: () => [
+        {
+          uri: "file://foo/one.md",
+          frontMatter: {
+            foo: {
+              bar: {
+                baz: "hello",
+              },
+            },
+          },
+          headings: [],
+          tags: [
+            {
+              text: "foo",
+            },
+            {
+              text: "bar",
+            },
+          ],
+          tasks: [],
+        },
+        {
+          uri: "file://foo/two.md",
+          frontMatter: {
+            foo: {
+              bar: {
+                baz: "hello",
+              },
+            },
+          },
+          headings: [],
+          path: "foo/two.md",
+          tags: [
+            {
+              text: "baz",
+            },
+          ],
+          tasks: [],
+          dataSource: "dummy",
+        },
+      ],
+      name: "dummy",
+      refresh() {
+        return Promise.resolve();
+      },
+    };
+    const testling = new QueryExecutor(ds);
+    const result = testling
+      .execute(
+        new Query(ViewType.LIST, ["path"], Table.DOCUMENTS, [
+          new Filter("tags", Operator.CONTAINS, "foo"),
+        ])
+      )
+      .raw();
+    expect(result.length).toBe(1);
+    expect(result).toMatchObject([{ path: "foo/one.md" }]);
   });
 });

@@ -1,12 +1,12 @@
-import { Document } from "../entities/document";
-import { Task } from "../entities/task";
+import { Document } from "./entities/document";
+import { Task } from "./entities/task";
 
 /**
  * Interface to be implemented by all data sources
  */
-export interface DataSource {
+export interface DataSource<T> {
   /**
-   * Name of the data source. This is used for `WHERE datasource='<name>'`filters and is case insensitive
+   * Name of the data source.
    */
   readonly name: string;
   /**
@@ -16,10 +16,5 @@ export interface DataSource {
   /**
    * Return all available entities of type document. If none are available, must return an empty array
    */
-  documents(): Document[];
-
-  /**
-   * Return all available entities of type document. If none are available, must return an empty array
-   */
-  tasks(): Task[];
+  documents(): T[];
 }

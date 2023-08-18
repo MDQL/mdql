@@ -1,10 +1,10 @@
-import * as fs from "fs";
-import { QueryableEntity } from "./entity";
-import { FrontMatter } from "./frontmatter";
+import { createLogger } from "../../logger";
+import { Entity } from "./entity";
 import { Heading } from "./heading";
 import { Tag } from "./tag";
+import fs from "fs";
 import { Task } from "./task";
-import { createLogger } from "../logger";
+import { FrontMatter } from "./frontmatter";
 
 type Frontmatter = Record<string, any>;
 
@@ -12,11 +12,11 @@ type Frontmatter = Record<string, any>;
  * Entity for markdown documents
  * @category Entities
  */
-export interface Document extends QueryableEntity {
+export interface Document extends Entity {
   /**
-   * Filepath of the markdown document
+   * URI of the markdown document
    */
-  path: string;
+  uri: string;
   /**
    * Tasks contained in the document
    */
@@ -50,8 +50,7 @@ export namespace Document {
     const frontMatter = FrontMatter.parse(content);
 
     return {
-      $uri: uri,
-      path: file.toString(),
+      uri: uri,
       headings,
       tasks,
       tags,

@@ -1,14 +1,13 @@
-import { createLogger } from "../logger";
-import { QueryableEntity } from "./entity";
+import { createLogger } from "../../logger";
+import { Entity } from "./entity";
 import { Tag } from "./tag";
 
 /**
  * Markdown Task
  * @category Entities
  */
-export interface Task extends QueryableEntity {
-  $checked: boolean;
-  status: "open" | "closed";
+export interface Task extends Entity {
+  checked: boolean;
   text: string;
   tags: Tag[];
 }
@@ -24,9 +23,8 @@ export namespace Task {
       const checked = match.groups?.["checked"].toLowerCase() === "x";
       const text = match.groups?.["text"] ?? "";
       const tags = Tag.parse(text);
-      const status = checked ? "closed" : "open";
       log.trace(`Found task at index ${match.index} with text ${text}`);
-      tasks.push({ $checked: checked, text, tags, status, $uri: documentUri });
+      tasks.push({ checked, text, tags });
     }
 
     return tasks;

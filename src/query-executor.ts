@@ -1,11 +1,12 @@
 import { DataSource } from "./data-sources/data-source";
+import { Document } from "./data-sources/entities/document";
 import { ParseError } from "./parse-error";
 import { FieldMapping, KeyValueObject, Query } from "./query";
 import { QueryResult } from "./query-result";
 import { Table } from "./table";
 
 export class QueryExecutor {
-  constructor(private dataSource: DataSource) {}
+  constructor(private dataSource: DataSource<Document>) {}
 
   execute(query: Query): QueryResult {
     let data: KeyValueObject[];
@@ -13,7 +14,7 @@ export class QueryExecutor {
     //Get data from corresponding table
     switch (query.table) {
       case Table.TASKS:
-        data = this.dataSource.tasks();
+        data = this.dataSource.documents().flatMap((d) => d.tasks);
         break;
       case Table.DOCUMENTS:
         data = this.dataSource.documents();
@@ -73,12 +74,22 @@ function getCaseInsensitivePropName(o: any, p: string): string | undefined {
   }
 }
 
+/**
+ * Flatten objects to dotted key value list
+ * @param obj
+ * @param parentKey
+ * @returns
+ */
 function flattenObject(obj: any, parentKey = ""): Record<string, any> {
   let result: Record<string, any> = {};
 
   for (const [key, value] of Object.entries(obj)) {
     const newKey = parentKey ? `${parentKey}.${key}` : key;
 
+    if (value !== null && Array.isArray(value)) {
+      //set the old key to the joined value
+      result[key] = value.join(",");
+    }
     if (typeof value === "object" && value !== null) {
       const flattened = flattenObject(value, newKey);
       result = { ...result, ...flattened };

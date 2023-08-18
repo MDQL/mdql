@@ -1,10 +1,13 @@
 import { DataSource } from "./data-source";
-import { Document } from "../entities/document";
-import { Task } from "../entities/task";
+import { Document } from "./entities/document";
 
-export class CombinedDataSource implements DataSource {
-  private datasources: DataSource[];
-  constructor(...datasources: DataSource[]) {
+export interface CombinedDsResult<T> {
+  dataSource: string;
+  data: T[];
+}
+export class CombinedDataSource<T> implements DataSource<CombinedDsResult<T>> {
+  private datasources: DataSource<T>[];
+  constructor(...datasources: DataSource<T>[]) {
     this.datasources = datasources;
   }
 
@@ -16,21 +19,12 @@ export class CombinedDataSource implements DataSource {
     await Promise.all(this.datasources.map((ds) => ds.refresh()));
   }
 
-  documents(): Document[] {
-    const result: Document[] = [];
+  documents(): CombinedDsResult<T>[] {
+    const result: CombinedDsResult<T>[] = [];
     for (const ds of this.datasources) {
       const documents = ds.documents();
 
-      result.push(...documents);
-    }
-    return result;
-  }
-
-  tasks(): Task[] {
-    const result: Task[] = [];
-    for (const ds of this.datasources) {
-      const tasks = ds.tasks();
-      result.push(...tasks);
+      result.push({ dataSource: ds.name, data: documents });
     }
     return result;
   }

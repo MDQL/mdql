@@ -1,13 +1,12 @@
 import { CombinedDataSource } from "./data-sources/combined-data-source";
 import { DataSource } from "./data-sources/data-source";
 import { DocumentRepository } from "./data-sources/document-repository";
-import { Document } from "./entities/document";
-import { Task } from "./entities/task";
+import { Document } from "./data-sources/entities/document";
 
 describe("integration tests", () => {
   it("Index md directory and merge with another datasource", async () => {
     const docRepo = new DocumentRepository("testdata/**/*.md");
-    const otherSource: DataSource = {
+    const otherSource: DataSource<Document> = {
       name: "otherds",
       refresh: function (): Promise<void> {
         return Promise.resolve();
@@ -17,24 +16,9 @@ describe("integration tests", () => {
           {
             frontMatter: {},
             headings: [],
-            path: "none",
             tags: [],
             tasks: [],
-            dataSource: this.name,
-            $uri: "file://foo/bar.md",
-          },
-        ];
-        return data;
-      },
-      tasks: function (): Task[] {
-        const data: Task[] = [
-          {
-            $checked: false,
-            status: "open",
-            tags: [],
-            text: "static task",
-            dataSource: this.name,
-            $uri: "file://foo/bar.md",
+            uri: "file://foo/bar.md",
           },
         ];
         return data;
@@ -43,11 +27,11 @@ describe("integration tests", () => {
     const dataSource = new CombinedDataSource(docRepo, otherSource);
     await dataSource.refresh();
 
-    const documents = await dataSource.documents();
-    expect(documents.length).toBe(4);
-    expect(documents[0].dataSource).toBe("markdown");
-    expect(documents[1].dataSource).toBe("markdown");
-    expect(documents[2].dataSource).toBe("markdown");
-    expect(documents[3].dataSource).toBe("otherds");
+    const results = await dataSource.documents();
+    expect(results.length).toBe(2);
+    expect(results[0].data.length).toBe(3);
+    expect(results[1].data.length).toBe(1);
+    expect(results[0].dataSource).toBe("markdown");
+    expect(results[1].dataSource).toBe("otherds");
   });
 });
